@@ -1,28 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { COMPANY_PHONE, COMPANY_PHONE_RAW, SERVICES_DATA } from '../../data/companyData';
 import { VisitRequestForm } from '../../types';
-import {
-  googleSignIn,
-  initAuth,
-  getAccessToken,
-  createGoogleCalendarEvent,
-  logInquiryToGoogleSheets,
-  buildGoogleCalendarWebUrl,
-} from '../../services/googleWorkspace';
-import { User } from 'firebase/auth';
+import { createAppointment, AppointmentResult } from '../../services/appointments';
 import {
   PhoneCall,
   Calendar as CalendarIcon,
   MessageCircle,
-  CheckCircle2,
   Video,
   MapPin,
   ExternalLink,
-  Info,
 } from 'lucide-react';
 import { SectionHeader } from '../ui/SectionHeader';
 import { ContactStatusBanner, StatusMessage } from '../ui/ContactStatusBanner';
-import { PANEL_CARD, SOFT_PANEL, CTA_BUTTON } from '../ui/uiTokens';
+import { PANEL_CARD, CTA_BUTTON } from '../ui/uiTokens';
 
 interface ContactSectionProps {
   selectedServicePreset?: string;
@@ -38,7 +28,8 @@ const getTomorrowDateString = () => {
   return d.toISOString().split('T')[0];
 };
 
-const buildWhatsAppText = (formData: VisitRequestForm) => {
+const buildWhatsAppText = (formData: VisitRequestForm, appointment?: AppointmentResult | null) => {
+  const location = appointment?.location || (formData.meetingType === 'virtual' ? 'Google Meet' : 'Calle 12');
   return [
     '*SOLICITUD DE ASESORÍA / VISITA - DEL VALLE SOFTWARE*',
     `👤 *Nombre:* ${formData.name || 'No especificado'}`,
@@ -48,6 +39,9 @@ const buildWhatsAppText = (formData: VisitRequestForm) => {
     `💼 *Servicio de Interés:* ${formData.serviceType}`,
     `📅 *Modalidad:* ${formData.meetingType === 'virtual' ? 'Reunión Virtual (Google Meet)' : 'Visita Presencial'}`,
     `⏰ *Fecha y Hora solicitada:* ${formData.date} a las ${formData.time}`,
+    `📍 *Lugar:* ${location}`,
+    appointment?.meetUrl ? `🔗 *Enlace de Google Meet:* ${appointment.meetUrl}` : '',
+    appointment?.calendarUrl ? `🗓️ *Evento de calendario:* ${appointment.calendarUrl}` : '',
     `📝 *Detalles del Proyecto:* ${formData.projectDetails || 'Quiero conocer más información'}`,
   ]
     .filter(Boolean)
@@ -55,10 +49,9 @@ const buildWhatsAppText = (formData: VisitRequestForm) => {
 };
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServicePreset }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState<StatusMessage | null>(null);
+  const [appointment, setAppointment] = useState<AppointmentResult | null>(null);
 
   const [formData, setFormData] = useState<VisitRequestForm>({
     name: '',
@@ -74,153 +67,77 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
   useEffect(() => {
     if (selectedServicePreset) {
+      setAppointment(null);
       setFormData((prev) => ({ ...prev, serviceType: selectedServicePreset }));
     }
   }, [selectedServicePreset]);
-
-  useEffect(() => {
-    const unsubscribe = initAuth(
-      (currentUser) => {
-        setUser(currentUser);
-        if (currentUser.email && !formData.email) {
-          setFormData((prev) => ({
-            ...prev,
-            email: currentUser.email || '',
-            name: prev.name || currentUser.displayName || '',
-          }));
-        }
-      },
-      () => {
-        setUser(null);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [formData.email]);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
+    setAppointment(null);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleGoogleLogin = async () => {
-    setIsAuthenticating(true);
-    setStatusMessage(null);
-
-    try {
-      const result = await googleSignIn();
-      if (result) {
-        setUser(result.user);
-        setStatusMessage({
-          type: 'info',
-          text: `Conectado exitosamente como ${result.user.displayName || result.user.email}. Ahora puedes agendar directamente en Google Calendar y registrar en Google Sheets.`,
-        });
-      }
-    } catch (error: any) {
-      if (error?.code !== 'auth/popup-closed-by-user' && error?.code !== 'auth/cancelled-popup-request') {
-        const isAccessDenied =
-          error?.code === 'auth/access_denied' ||
-          String(error?.message || '').includes('access_denied') ||
-          String(error?.message || '').includes('403');
-
-        if (isAccessDenied) {
-          setStatusMessage({
-            type: 'info',
-            text: 'Google bloqueó el acceso porque la app está en "Modo Prueba" en Google Cloud.',
-            details:
-              'Para que ese correo pueda iniciar sesión con la API, debes agregarlo como "Usuario de prueba" en Google Cloud Console. Sin embargo, no te preocupes: puedes agendar la cita y abrirla en Google Calendar con 1 solo clic sin permisos usando el enlace directo.',
-            calendarUrl: buildGoogleCalendarWebUrl(formData),
-          });
-        } else {
-          setStatusMessage({
-            type: 'error',
-            text: 'No se pudo completar la conexión con Google.',
-            details: error.message || 'Verifica los permisos e intenta de nuevo.',
-          });
-        }
-      }
-    } finally {
-      setIsAuthenticating(false);
+  const submitAppointment = async () => {
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.email?.trim()) {
+      throw new Error('Ingresa nombre, teléfono y correo para enviar la invitación de calendario.');
     }
+
+    const result = await createAppointment(formData);
+    setAppointment(result);
+    return result;
   };
 
-  const handleSubmitWithGoogleWorkspace = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      setStatusMessage({
-        type: 'error',
-        text: 'Por favor ingresa al menos tu nombre y número de teléfono/WhatsApp.',
-      });
-      return;
-    }
 
     setIsSubmitting(true);
     setStatusMessage(null);
 
     try {
-      const currentToken = await getAccessToken();
-
-      if (currentToken && user) {
-        let calendarLink = '';
-        try {
-          const calendarResult = await createGoogleCalendarEvent(currentToken, formData);
-          calendarLink = calendarResult.htmlLink;
-        } catch (calendarError: any) {
-          console.warn('Calendar sync notice:', calendarError);
-        }
-
-        let sheetsLink = '';
-        try {
-          const sheetsResult = await logInquiryToGoogleSheets(currentToken, formData);
-          sheetsLink = sheetsResult.spreadsheetUrl;
-        } catch (sheetsError: any) {
-          console.warn('Sheets sync notice:', sheetsError);
-        }
-
-        setStatusMessage({
-          type: 'success',
-          text: '¡Visita agendada y sincronizada con Google Workspace!',
-          details:
-            'Se ha creado la cita en Google Calendar y se ha registrado en Google Sheets. Puedes consultar el evento o notificar a WhatsApp para confirmación inmediata.',
-          calendarUrl: calendarLink || buildGoogleCalendarWebUrl(formData),
-          sheetsUrl: sheetsLink,
-        });
-        return;
-      }
-
-      const directUrl = buildGoogleCalendarWebUrl(formData);
+      const result = await submitAppointment();
       setStatusMessage({
         type: 'success',
-        text: '¡Visita registrada con éxito en Del Valle Software!',
+        text: '¡Visita agendada y enviada por correo!',
         details:
-          'Hemos preparado tu cita para la fecha y hora seleccionada. Haz clic en "Añadir a Google Calendar" para guardarla en tu calendario sin necesidad de autorizaciones o envíanos los detalles por WhatsApp.',
-        calendarUrl: directUrl,
+          'La empresa y el correo indicado recibieron la invitación de calendario. Usa WhatsApp para compartir exactamente la misma información.',
+        calendarUrl: result.calendarUrl,
       });
-    } catch (error: any) {
-      console.error('Error in workspace submission:', error);
+    } catch (error) {
       setStatusMessage({
         type: 'error',
-        text: 'Ocurrió un detalle al procesar la solicitud.',
-        details:
-          error.message ||
-          'Puedes usar el botón "Añadir a Google Calendar (Enlace Directo)" o escribirnos directamente a WhatsApp.',
-        calendarUrl: buildGoogleCalendarWebUrl(formData),
+        text: error instanceof Error ? error.message : 'No se pudo procesar la solicitud.',
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleWhatsAppDirect = () => {
-    const text = buildWhatsAppText(formData);
+  const handleWhatsAppDirect = async () => {
+    let currentAppointment = appointment;
+    try {
+      if (!currentAppointment) {
+        setIsSubmitting(true);
+        currentAppointment = await submitAppointment();
+        setStatusMessage({
+          type: 'success',
+          text: '¡Visita agendada y enviada por correo!',
+          details: 'Ahora abriremos WhatsApp con los mismos datos y enlaces de la cita.',
+          calendarUrl: currentAppointment.calendarUrl,
+        });
+      }
+    } catch (error) {
+      setStatusMessage({ type: 'error', text: error instanceof Error ? error.message : 'No se pudo agendar la cita.' });
+      return;
+    } finally {
+      setIsSubmitting(false);
+    }
+    const text = buildWhatsAppText(formData, currentAppointment);
     const url = `https://wa.me/${COMPANY_PHONE_RAW}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
-
-  const directCalendarUrl = buildGoogleCalendarWebUrl(formData);
 
   return (
     <section id="contacto" className="py-24 bg-slate-950 text-slate-100 relative overflow-hidden">
@@ -231,7 +148,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
         <SectionHeader
           chip="Contacto & Agendamiento"
           title="Agenda tu visita o diagnóstico tecnológico"
-          subtitle="Cuéntanos sobre tu negocio. Programamos una sesión de asesoría virtual o presencial y la conectamos a tu Google Calendar y Google Sheets."
+          subtitle="Cuéntanos sobre tu negocio. Enviaremos la invitación a tu calendario y al correo de Del Valle Software."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -264,18 +181,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
               </button>
             </div>
 
-            <div className={`${SOFT_PANEL} p-5 text-xs sm:text-sm text-slate-300 space-y-2.5`}>
-              <div className="flex items-center gap-2 text-sky-400 font-semibold">
-                <Info className="w-4 h-4 shrink-0" />
-                <span>Canales de Comunicación en Despliegue</span>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Actualmente nuestro canal oficial prioritario es telefónico y WhatsApp directo{' '}
-                <strong className="text-slate-300">({COMPANY_PHONE})</strong>. Próximamente habilitaremos
-                correos corporativos y redes sociales oficiales para complementar esta plataforma web.
-              </p>
-            </div>
-
             <div className="p-5 rounded-xl bg-slate-900/80 border border-sky-500/25 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -283,31 +188,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                     <CalendarIcon className="w-4 h-4 text-sky-400" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white">Google Workspace Habilitado</h4>
-                    <span className="text-[11px] text-slate-400">Calendar & Sheets</span>
+                    <h4 className="text-xs font-bold text-white">Invitación de Calendar</h4>
+                    <span className="text-[11px] text-slate-400">Correo + Google Meet</span>
                   </div>
                 </div>
-
-                {user ? (
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-950 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" />
-                    Conectado
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    disabled={isAuthenticating}
-                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition-colors"
-                  >
-                    {isAuthenticating ? 'Conectando...' : 'Conectar Google'}
-                  </button>
-                )}
               </div>
 
               <p className="text-xs text-slate-400">
-                Al enviar el formulario, agendaremos automáticamente el evento en tu calendario y
-                organizaremos los detalles en una hoja de Google Sheets.
+                Al enviar el formulario crearemos el evento en el calendario de la empresa, incluiremos Google
+                Meet si lo eliges y enviaremos la invitación a ambos correos.
               </p>
             </div>
           </div>
@@ -325,7 +214,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
               {statusMessage && <ContactStatusBanner {...statusMessage} />}
 
-              <form onSubmit={handleSubmitWithGoogleWorkspace} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={LABEL_CLASS}>
@@ -406,7 +295,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
-                        onClick={() => setFormData((prev) => ({ ...prev, meetingType: 'virtual' }))}
+                        onClick={() => { setAppointment(null); setFormData((prev) => ({ ...prev, meetingType: 'virtual' })); }}
                         className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all ${
                           formData.meetingType === 'virtual'
                             ? 'bg-sky-950/80 border-sky-400 text-white'
@@ -419,7 +308,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
                       <button
                         type="button"
-                        onClick={() => setFormData((prev) => ({ ...prev, meetingType: 'presencial' }))}
+                        onClick={() => { setAppointment(null); setFormData((prev) => ({ ...prev, meetingType: 'presencial' })); }}
                         className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all ${
                           formData.meetingType === 'presencial'
                             ? 'bg-sky-950/80 border-sky-400 text-white'
@@ -494,16 +383,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                   </button>
 
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-1">
-                    <a
-                      href={directCalendarUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-auto text-center px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-slate-950 border border-slate-800 hover:border-slate-700 flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <CalendarIcon className="w-3.5 h-3.5 text-sky-400" />
-                      <span>Añadir a Google Calendar (Sin permisos / Directo)</span>
-                      <ExternalLink className="w-3 h-3 text-slate-500" />
-                    </a>
+                    {appointment && (
+                      <a
+                        href={appointment.calendarUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto text-center px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-slate-950 border border-slate-800 hover:border-slate-700 flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <CalendarIcon className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Ver evento en Google Calendar</span>
+                        <ExternalLink className="w-3 h-3 text-slate-500" />
+                      </a>
+                    )}
 
                     <button
                       type="button"
