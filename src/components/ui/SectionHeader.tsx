@@ -1,10 +1,4 @@
 import React from 'react';
-import {
-  SECTION_HEADER_CHIP,
-  SECTION_HEADER_SUBTITLE,
-  SECTION_HEADER_TITLE,
-} from './uiTokens';
-
 interface SectionHeaderProps {
   chip: string;
   title: string;
@@ -30,3 +24,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
     </div>
   );
 };
+import {
+  SECTION_HEADER_CHIP,
+  SECTION_HEADER_SUBTITLE,
+  SECTION_HEADER_TITLE,
+} from './uiTokens';

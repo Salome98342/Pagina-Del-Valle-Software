@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { COMPANY_PHONE, COMPANY_PHONE_RAW, SERVICES_DATA } from '../data/companyData';
-import { VisitRequestForm } from '../types';
+import { COMPANY_PHONE, COMPANY_PHONE_RAW, SERVICES_DATA } from '../../data/companyData';
+import { VisitRequestForm } from '../../types';
 import {
   googleSignIn,
   initAuth,
@@ -8,7 +8,7 @@ import {
   createGoogleCalendarEvent,
   logInquiryToGoogleSheets,
   buildGoogleCalendarWebUrl,
-} from '../services/googleWorkspace';
+} from '../../services/googleWorkspace';
 import { User } from 'firebase/auth';
 import {
   PhoneCall,
@@ -20,9 +20,9 @@ import {
   ExternalLink,
   Info,
 } from 'lucide-react';
-import { SectionHeader } from './ui/SectionHeader';
-import { ContactStatusBanner, StatusMessage, StatusType } from './ui/ContactStatusBanner';
-import { PANEL_CARD, SOFT_PANEL, CTA_BUTTON } from './ui/uiTokens';
+import { SectionHeader } from '../ui/SectionHeader';
+import { ContactStatusBanner, StatusMessage } from '../ui/ContactStatusBanner';
+import { PANEL_CARD, SOFT_PANEL, CTA_BUTTON } from '../ui/uiTokens';
 
 interface ContactSectionProps {
   selectedServicePreset?: string;

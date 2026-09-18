@@ -13,4 +13,4 @@ export const SOFT_PANEL =
   'rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/30 transition-all duration-300';
 
 export const CTA_BUTTON =
-  'inline-flex items-center justify-center gap-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 shadow-xl shadow-sky-950/60 transition-all';
+  'inline-flex items-center justify-center gap-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 shadow-xl shadow-slate-950/60 transition-all';

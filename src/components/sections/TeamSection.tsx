@@ -1,7 +1,7 @@
 import React from 'react';
-import { TEAM_MEMBERS } from '../data/companyData';
-import { SectionHeader } from './ui/SectionHeader';
-import { TeamMemberCard } from './ui/TeamMemberCard';
+import { TEAM_MEMBERS } from '../../data/companyData';
+import { SectionHeader } from '../ui/SectionHeader';
+import { TeamMemberCard } from '../ui/TeamMemberCard';
 import { ShieldCheck } from 'lucide-react';
 
 export const TeamSection: React.FC = () => {

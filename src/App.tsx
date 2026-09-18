@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { ServicesSection } from './components/ServicesSection';
-import { ProjectsSection } from './components/ProjectsSection';
-import { TestimonialsSection } from './components/TestimonialsSection';
-import { TeamSection } from './components/TeamSection';
-import { ContactSection } from './components/ContactSection';
-import { Footer } from './components/Footer';
+import { Footer, Navbar } from './components/layout';
+import {
+  ContactSection,
+  Hero,
+  ProjectsSection,
+  ServicesSection,
+  TeamSection,
+  TestimonialsSection,
+} from './components/sections';
 import { COMPANY_PHONE_RAW } from './data/companyData';
 import { MessageCircle, ChevronUp } from 'lucide-react';
 

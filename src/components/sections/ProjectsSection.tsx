@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { PROJECTS_DATA } from '../data/companyData';
-import { SectionHeader } from './ui/SectionHeader';
-import { ProjectTabButton } from './ui/ProjectTabButton';
+import { PROJECTS_DATA } from '../../data/companyData';
+import { SectionHeader } from '../ui/SectionHeader';
+import { ProjectTabButton } from '../ui/ProjectTabButton';
 import {
   Layers,
   Search,

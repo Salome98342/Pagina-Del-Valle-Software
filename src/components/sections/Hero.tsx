@@ -1,5 +1,5 @@
 import React from 'react';
-import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../data/companyData';
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../../data/companyData';
 import {
   ArrowRight,
   Sparkles,
@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   Layers,
 } from 'lucide-react';
-import { HeroFeatureCard } from './ui/HeroFeatureCard';
+import { HeroFeatureCard } from '../ui/HeroFeatureCard';
 
 interface HeroProps {
   onScheduleClick?: () => void;

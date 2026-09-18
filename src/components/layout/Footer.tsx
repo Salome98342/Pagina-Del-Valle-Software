@@ -1,6 +1,6 @@
 import React from 'react';
 import { Logo } from './Logo';
-import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../data/companyData';
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../../data/companyData';
 import { PhoneCall, MessageCircle, Calendar, ShieldCheck, Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {

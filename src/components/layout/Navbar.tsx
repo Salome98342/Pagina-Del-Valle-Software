@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Logo } from './Logo';
-import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../data/companyData';
-import { auth, googleSignIn, logoutGoogle, initAuth } from '../services/googleWorkspace';
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../../data/companyData';
+import { googleSignIn, logoutGoogle, initAuth } from '../../services/googleWorkspace';
 import { User } from 'firebase/auth';
 import {
   PhoneCall,
@@ -12,7 +12,7 @@ import {
   CheckCircle2,
   MessageSquare,
 } from 'lucide-react';
-import { NavLinkItem } from './ui/NavLinkItem';
+import { NavLinkItem } from '../ui/NavLinkItem';
 
 interface NavbarProps {
   onOpenBooking?: () => void;

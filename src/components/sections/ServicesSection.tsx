@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { SERVICES_DATA } from '../data/companyData';
-import { ServiceItem } from '../types';
-import { SectionHeader } from './ui/SectionHeader';
-import { ServiceCard } from './ui/ServiceCard';
-import { AssessmentSelector } from './ui/AssessmentSelector';
+import { SERVICES_DATA } from '../../data/companyData';
+import { ServiceItem } from '../../types';
+import { SectionHeader } from '../ui/SectionHeader';
+import { ServiceCard } from '../ui/ServiceCard';
+import { AssessmentSelector } from '../ui/AssessmentSelector';
 import {
   LayoutDashboard,
   Cpu,
