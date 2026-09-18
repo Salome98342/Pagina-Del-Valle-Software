@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { COMPANY_PHONE, COMPANY_PHONE_RAW, SERVICES_DATA } from '../data/companyData';
 import { VisitRequestForm } from '../types';
 import {
-  auth,
   googleSignIn,
-  logoutGoogle,
   initAuth,
   getAccessToken,
   createGoogleCalendarEvent,
@@ -16,42 +14,51 @@ import {
   PhoneCall,
   Calendar as CalendarIcon,
   MessageCircle,
-  FileSpreadsheet,
   CheckCircle2,
-  Clock,
   Video,
   MapPin,
-  Send,
-  AlertCircle,
   ExternalLink,
-  Sparkles,
   Info,
-  ChevronRight,
-  ShieldCheck,
 } from 'lucide-react';
+import { SectionHeader } from './ui/SectionHeader';
+import { ContactStatusBanner, StatusMessage, StatusType } from './ui/ContactStatusBanner';
+import { PANEL_CARD, SOFT_PANEL, CTA_BUTTON } from './ui/uiTokens';
 
 interface ContactSectionProps {
   selectedServicePreset?: string;
 }
 
+const FORM_FIELD_CLASS =
+  'w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors';
+const LABEL_CLASS = 'block text-xs font-semibold text-slate-300 mb-1.5';
+
+const getTomorrowDateString = () => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split('T')[0];
+};
+
+const buildWhatsAppText = (formData: VisitRequestForm) => {
+  return [
+    '*SOLICITUD DE ASESORÍA / VISITA - DEL VALLE SOFTWARE*',
+    `👤 *Nombre:* ${formData.name || 'No especificado'}`,
+    `🏢 *Empresa:* ${formData.company || 'Independiente'}`,
+    `📱 *Teléfono:* ${formData.phone || 'No especificado'}`,
+    formData.email ? `✉️ *Email:* ${formData.email}` : '',
+    `💼 *Servicio de Interés:* ${formData.serviceType}`,
+    `📅 *Modalidad:* ${formData.meetingType === 'virtual' ? 'Reunión Virtual (Google Meet)' : 'Visita Presencial'}`,
+    `⏰ *Fecha y Hora solicitada:* ${formData.date} a las ${formData.time}`,
+    `📝 *Detalles del Proyecto:* ${formData.projectDetails || 'Quiero conocer más información'}`,
+  ]
+    .filter(Boolean)
+    .join('\n');
+};
+
 export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServicePreset }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<{
-    type: 'success' | 'error' | 'info';
-    text: string;
-    details?: string;
-    calendarUrl?: string;
-    sheetsUrl?: string;
-  } | null>(null);
-
-  // Default date to tomorrow
-  const getTomorrowDateString = () => {
-    const d = new Date();
-    d.setDate(d.getDate() + 1);
-    return d.toISOString().split('T')[0];
-  };
+  const [statusMessage, setStatusMessage] = useState<StatusMessage | null>(null);
 
   const [formData, setFormData] = useState<VisitRequestForm>({
     name: '',
@@ -87,34 +94,36 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
         setUser(null);
       }
     );
+
     return () => unsubscribe();
-  }, []);
+  }, [formData.email]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleGoogleLogin = async () => {
     setIsAuthenticating(true);
     setStatusMessage(null);
+
     try {
-      const res = await googleSignIn();
-      if (res) {
-        setUser(res.user);
+      const result = await googleSignIn();
+      if (result) {
+        setUser(result.user);
         setStatusMessage({
           type: 'info',
-          text: `Conectado exitosamente como ${res.user.displayName || res.user.email}. Ahora puedes agendar directamente en Google Calendar y registrar en Google Sheets.`,
+          text: `Conectado exitosamente como ${result.user.displayName || result.user.email}. Ahora puedes agendar directamente en Google Calendar y registrar en Google Sheets.`,
         });
       }
-    } catch (err: any) {
-      if (err?.code !== 'auth/popup-closed-by-user' && err?.code !== 'auth/cancelled-popup-request') {
+    } catch (error: any) {
+      if (error?.code !== 'auth/popup-closed-by-user' && error?.code !== 'auth/cancelled-popup-request') {
         const isAccessDenied =
-          err?.code === 'auth/access_denied' ||
-          String(err?.message || '').includes('access_denied') ||
-          String(err?.message || '').includes('403');
+          error?.code === 'auth/access_denied' ||
+          String(error?.message || '').includes('access_denied') ||
+          String(error?.message || '').includes('403');
 
         if (isAccessDenied) {
           setStatusMessage({
@@ -128,7 +137,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
           setStatusMessage({
             type: 'error',
             text: 'No se pudo completar la conexión con Google.',
-            details: err.message || 'Verifica los permisos e intenta de nuevo.',
+            details: error.message || 'Verifica los permisos e intenta de nuevo.',
           });
         }
       }
@@ -137,8 +146,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
     }
   };
 
-  const handleSubmitWithGoogleWorkspace = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmitWithGoogleWorkspace = async (event: React.FormEvent) => {
+    event.preventDefault();
 
     if (!formData.name.trim() || !formData.phone.trim()) {
       setStatusMessage({
@@ -152,24 +161,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
     setStatusMessage(null);
 
     try {
-      let currentToken = await getAccessToken();
+      const currentToken = await getAccessToken();
 
-      // If user is already authenticated with Google Workspace token, sync directly via API
       if (currentToken && user) {
-        let calLink = '';
+        let calendarLink = '';
         try {
-          const calResult = await createGoogleCalendarEvent(currentToken, formData);
-          calLink = calResult.htmlLink;
-        } catch (calError: any) {
-          console.warn('Calendar sync notice:', calError);
+          const calendarResult = await createGoogleCalendarEvent(currentToken, formData);
+          calendarLink = calendarResult.htmlLink;
+        } catch (calendarError: any) {
+          console.warn('Calendar sync notice:', calendarError);
         }
 
-        let sheetLink = '';
+        let sheetsLink = '';
         try {
-          const sheetResult = await logInquiryToGoogleSheets(currentToken, formData);
-          sheetLink = sheetResult.spreadsheetUrl;
-        } catch (sheetError: any) {
-          console.warn('Sheets sync notice:', sheetError);
+          const sheetsResult = await logInquiryToGoogleSheets(currentToken, formData);
+          sheetsLink = sheetsResult.spreadsheetUrl;
+        } catch (sheetsError: any) {
+          console.warn('Sheets sync notice:', sheetsError);
         }
 
         setStatusMessage({
@@ -177,14 +185,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
           text: '¡Visita agendada y sincronizada con Google Workspace!',
           details:
             'Se ha creado la cita en Google Calendar y se ha registrado en Google Sheets. Puedes consultar el evento o notificar a WhatsApp para confirmación inmediata.',
-          calendarUrl: calLink || buildGoogleCalendarWebUrl(formData),
-          sheetsUrl: sheetLink,
+          calendarUrl: calendarLink || buildGoogleCalendarWebUrl(formData),
+          sheetsUrl: sheetsLink,
         });
         return;
       }
 
-      // If user is NOT already signed in with Google, provide instant seamless booking
-      // so clients never get blocked by Google OAuth test mode screens!
       const directUrl = buildGoogleCalendarWebUrl(formData);
       setStatusMessage({
         type: 'success',
@@ -209,20 +215,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
   };
 
   const handleWhatsAppDirect = () => {
-    const text = [
-      `*SOLICITUD DE ASESORÍA / VISITA - DEL VALLE SOFTWARE*`,
-      `👤 *Nombre:* ${formData.name || 'No especificado'}`,
-      `🏢 *Empresa:* ${formData.company || 'Independiente'}`,
-      `📱 *Teléfono:* ${formData.phone || 'No especificado'}`,
-      formData.email ? `✉️ *Email:* ${formData.email}` : '',
-      `💼 *Servicio de Interés:* ${formData.serviceType}`,
-      `📅 *Modalidad:* ${formData.meetingType === 'virtual' ? 'Reunión Virtual (Google Meet)' : 'Visita Presencial'}`,
-      `⏰ *Fecha y Hora solicitada:* ${formData.date} a las ${formData.time}`,
-      `📝 *Detalles del Proyecto:* ${formData.projectDetails || 'Quiero conocer más información'}`,
-    ]
-      .filter(Boolean)
-      .join('\n');
-
+    const text = buildWhatsAppText(formData);
     const url = `https://wa.me/${COMPANY_PHONE_RAW}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
@@ -231,30 +224,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
   return (
     <section id="contacto" className="py-24 bg-slate-950 text-slate-100 relative overflow-hidden">
-      {/* Glow shapes */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/60 border border-sky-500/20 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-3">
-            Contacto & Agendamiento
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Agenda tu visita o diagnóstico tecnológico
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-300">
-            Cuéntanos sobre tu negocio. Programamos una sesión de asesoría virtual o presencial y la
-            conectamos a tu Google Calendar y Google Sheets.
-          </p>
-        </div>
+        <SectionHeader
+          chip="Contacto & Agendamiento"
+          title="Agenda tu visita o diagnóstico tecnológico"
+          subtitle="Cuéntanos sobre tu negocio. Programamos una sesión de asesoría virtual o presencial y la conectamos a tu Google Calendar y Google Sheets."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Left Column: Direct Contact Details & Company Status */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Primary Phone / WhatsApp Card */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/40 border border-slate-800 shadow-xl space-y-6">
+            <div className={`${PANEL_CARD} p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/40 shadow-xl space-y-6`}>
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30">
                   <PhoneCall className="w-6 h-6 animate-pulse" />
@@ -263,9 +245,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                   <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                     Línea Directa Oficial
                   </span>
-                  <h3 className="text-2xl font-bold text-white tracking-wide">
-                    {COMPANY_PHONE}
-                  </h3>
+                  <h3 className="text-2xl font-bold text-white tracking-wide">{COMPANY_PHONE}</h3>
                 </div>
               </div>
 
@@ -274,7 +254,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                 escribirnos de inmediato por WhatsApp para resolver dudas rápidas.
               </p>
 
-              {/* Instant WhatsApp Button */}
               <button
                 type="button"
                 onClick={handleWhatsAppDirect}
@@ -285,8 +264,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
               </button>
             </div>
 
-            {/* Transparent Channels Notice */}
-            <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800/90 text-xs sm:text-sm text-slate-300 space-y-2.5">
+            <div className={`${SOFT_PANEL} p-5 text-xs sm:text-sm text-slate-300 space-y-2.5`}>
               <div className="flex items-center gap-2 text-sky-400 font-semibold">
                 <Info className="w-4 h-4 shrink-0" />
                 <span>Canales de Comunicación en Despliegue</span>
@@ -298,7 +276,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
               </p>
             </div>
 
-            {/* Google Workspace Integration Banner */}
             <div className="p-5 rounded-xl bg-slate-900/80 border border-sky-500/25 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -335,9 +312,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
             </div>
           </div>
 
-          {/* Right Column: Interactive Scheduling Form */}
           <div className="lg:col-span-7">
-            <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6">
+            <div className={`${PANEL_CARD} p-6 sm:p-8 shadow-2xl space-y-6`}>
               <div className="border-b border-slate-800 pb-4">
                 <h3 className="text-xl font-bold text-white">
                   Formulario de Solicitud de Visita & Diagnóstico
@@ -347,69 +323,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                 </p>
               </div>
 
-              {/* Status Banner */}
-              {statusMessage && (
-                <div
-                  className={`p-4 rounded-xl border text-xs sm:text-sm animate-in fade-in duration-200 ${
-                    statusMessage.type === 'success'
-                      ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200'
-                      : statusMessage.type === 'error'
-                      ? 'bg-rose-950/60 border-rose-500/40 text-rose-200'
-                      : 'bg-sky-950/60 border-sky-500/40 text-sky-200'
-                  }`}
-                >
-                  <div className="flex items-start gap-2.5">
-                    {statusMessage.type === 'success' ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                    ) : (
-                      <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-                    )}
-                    <div className="space-y-1">
-                      <p className="font-bold">{statusMessage.text}</p>
-                      {statusMessage.details && (
-                        <p className="text-xs opacity-90">{statusMessage.details}</p>
-                      )}
-
-                      {/* Action links */}
-                      {(statusMessage.calendarUrl || statusMessage.sheetsUrl) && (
-                        <div className="pt-2 flex flex-wrap gap-2">
-                          {statusMessage.calendarUrl && (
-                            <a
-                              href={statusMessage.calendarUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-900/80 hover:bg-emerald-800 text-white text-xs font-semibold"
-                            >
-                              <CalendarIcon className="w-3.5 h-3.5" />
-                              <span>Ver en Google Calendar</span>
-                              <ExternalLink className="w-3 h-3 ml-0.5" />
-                            </a>
-                          )}
-
-                          {statusMessage.sheetsUrl && (
-                            <a
-                              href={statusMessage.sheetsUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-900/80 hover:bg-emerald-800 text-white text-xs font-semibold"
-                            >
-                              <FileSpreadsheet className="w-3.5 h-3.5" />
-                              <span>Ver Registro en Google Sheets</span>
-                              <ExternalLink className="w-3 h-3 ml-0.5" />
-                            </a>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
+              {statusMessage && <ContactStatusBanner {...statusMessage} />}
 
               <form onSubmit={handleSubmitWithGoogleWorkspace} className="space-y-4">
-                {/* Name & Company */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className={LABEL_CLASS}>
                       Nombre Completo <span className="text-rose-400">*</span>
                     </label>
                     <input
@@ -419,29 +338,26 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                       placeholder="Ej: Carlos Gómez"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Empresa o Negocio
-                    </label>
+                    <label className={LABEL_CLASS}>Empresa o Negocio</label>
                     <input
                       type="text"
                       name="company"
                       placeholder="Ej: Distribuidora del Valle"
                       value={formData.company}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
                 </div>
 
-                {/* Phone & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className={LABEL_CLASS}>
                       Teléfono / WhatsApp <span className="text-rose-400">*</span>
                     </label>
                     <input
@@ -451,49 +367,42 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                       placeholder="Ej: +57 300 1234567"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Correo Electrónico (para invitación de calendario)
-                    </label>
+                    <label className={LABEL_CLASS}>Correo Electrónico (para invitación de calendario)</label>
                     <input
                       type="email"
                       name="email"
                       placeholder="correo@ejemplo.com"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
                 </div>
 
-                {/* Service Selector & Meeting Type */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Servicio Principal de Interés
-                    </label>
+                    <label className={LABEL_CLASS}>Servicio Principal de Interés</label>
                     <select
                       name="serviceType"
                       value={formData.serviceType}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     >
-                      {SERVICES_DATA.map((s) => (
-                        <option key={s.id} value={s.title}>
-                          {s.title}
+                      {SERVICES_DATA.map((service) => (
+                        <option key={service.id} value={service.title}>
+                          {service.title}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Modalidad de Visita
-                    </label>
+                    <label className={LABEL_CLASS}>Modalidad de Visita</label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
@@ -524,12 +433,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                   </div>
                 </div>
 
-                {/* Date & Time */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Fecha sugerida para la visita
-                    </label>
+                    <label className={LABEL_CLASS}>Fecha sugerida para la visita</label>
                     <input
                       type="date"
                       name="date"
@@ -537,28 +443,25 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                       required
                       value={formData.date}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Hora sugerida
-                    </label>
+                    <label className={LABEL_CLASS}>Hora sugerida</label>
                     <input
                       type="time"
                       name="time"
                       required
                       value={formData.time}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-sky-500 transition-colors"
+                      className={FORM_FIELD_CLASS}
                     />
                   </div>
                 </div>
 
-                {/* Project Details */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className={LABEL_CLASS}>
                     ¿Qué proceso te gustaría mejorar o qué necesidad tienes?
                   </label>
                   <textarea
@@ -567,16 +470,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                     placeholder="Ej: Necesitamos ordenar el inventario de 2 bodegas y queremos aumentar clientes con redes sociales..."
                     value={formData.projectDetails}
                     onChange={handleInputChange}
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
+                    className={FORM_FIELD_CLASS}
                   />
                 </div>
 
-                {/* Primary Action Buttons */}
                 <div className="pt-2 space-y-3">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 px-6 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 shadow-xl shadow-sky-950/60 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+                    className={CTA_BUTTON + ' w-full'}
                   >
                     {isSubmitting ? (
                       <>
@@ -592,7 +494,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                   </button>
 
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-1">
-                    {/* Direct Calendar Web URL shortcut */}
                     <a
                       href={directCalendarUrl}
                       target="_blank"
@@ -604,7 +505,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                       <ExternalLink className="w-3 h-3 text-slate-500" />
                     </a>
 
-                    {/* WhatsApp Quick Dispatch */}
                     <button
                       type="button"
                       onClick={handleWhatsAppDirect}

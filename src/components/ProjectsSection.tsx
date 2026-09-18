@@ -1,28 +1,21 @@
 import React, { useState } from 'react';
 import { PROJECTS_DATA } from '../data/companyData';
+import { SectionHeader } from './ui/SectionHeader';
+import { ProjectTabButton } from './ui/ProjectTabButton';
 import {
   Layers,
-  Package,
-  ShoppingCart,
-  BarChart3,
   Search,
-  Plus,
   CheckCircle,
   TrendingUp,
-  Clock,
-  Shield,
   ExternalLink,
-  Laptop,
-  Smartphone,
   Check,
 } from 'lucide-react';
 
 export const ProjectsSection: React.FC = () => {
   const [activeProjectTab, setActiveProjectTab] = useState<'erp' | 'social'>('erp');
   const [erpActiveView, setErpActiveView] = useState<'dashboard' | 'inventario' | 'ventas'>('dashboard');
-
-  // Interactive mock inventory data
   const [inventorySearch, setInventorySearch] = useState('');
+
   const sampleProducts = [
     { id: 'PRD-01', name: 'Software Licencia Estándar', sku: 'DVS-LIC-01', stock: 45, price: '$450.000', status: 'En Stock' },
     { id: 'PRD-02', name: 'Módulo Facturación Electrónica', sku: 'DVS-FAC-02', stock: 12, price: '$280.000', status: 'Stock Bajo' },
@@ -30,61 +23,41 @@ export const ProjectsSection: React.FC = () => {
     { id: 'PRD-04', name: 'Punto de Venta POS Hardware', sku: 'DVS-POS-04', stock: 24, price: '$1.150.000', status: 'En Stock' },
   ];
 
-  const filteredProducts = sampleProducts.filter((p) =>
-    p.name.toLowerCase().includes(inventorySearch.toLowerCase()) ||
-    p.sku.toLowerCase().includes(inventorySearch.toLowerCase())
+  const filteredProducts = sampleProducts.filter(
+    (p) =>
+      p.name.toLowerCase().includes(inventorySearch.toLowerCase()) ||
+      p.sku.toLowerCase().includes(inventorySearch.toLowerCase())
   );
 
   return (
     <section id="proyectos" className="py-24 bg-slate-900/60 border-y border-slate-800/80 text-slate-100 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/20 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-3">
-            Casos de Éxito & Proyectos Realizados
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Tecnología probada en el mundo real
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-300">
-            No somos solo promesas teóricas: ya hemos construido plataformas que hoy están ayudando a
-            empresas a organizar sus operaciones y multiplicar su impacto digital.
-          </p>
-        </div>
+        <SectionHeader
+          chip="Casos de Éxito & Proyectos Realizados"
+          chipClassName="bg-cyan-950/60 border-cyan-500/20 text-cyan-400"
+          title="Tecnología probada en el mundo real"
+          subtitle="No somos solo promesas teóricas: ya hemos construido plataformas que hoy están ayudando a empresas a organizar sus operaciones y multiplicar su impacto digital."
+        />
 
-        {/* Project Selector Tabs */}
         <div className="flex justify-center mb-10">
           <div className="p-1.5 rounded-xl bg-slate-950 border border-slate-800 inline-flex">
-            <button
+            <ProjectTabButton
+              active={activeProjectTab === 'erp'}
+              icon={<Layers className="w-4 h-4" />}
+              label="Sistema de Gestión Empresarial (ERP)"
               onClick={() => setActiveProjectTab('erp')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
-                activeProjectTab === 'erp'
-                  ? 'bg-sky-600 text-white shadow-md shadow-sky-950'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <Layers className="w-4 h-4" />
-              <span>Sistema de Gestión Empresarial (ERP)</span>
-            </button>
-
-            <button
+            />
+            <ProjectTabButton
+              active={activeProjectTab === 'social'}
+              icon={<TrendingUp className="w-4 h-4" />}
+              label="Estrategia de Redes & Alcance Digital"
               onClick={() => setActiveProjectTab('social')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
-                activeProjectTab === 'social'
-                  ? 'bg-sky-600 text-white shadow-md shadow-sky-950'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <TrendingUp className="w-4 h-4" />
-              <span>Estrategia de Redes & Alcance Digital</span>
-            </button>
+            />
           </div>
         </div>
 
-        {/* Project 1: Sistema de Gestión Showcase */}
         {activeProjectTab === 'erp' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Description & Metrics */}
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-950/70 text-emerald-400 border border-emerald-500/30 text-xs font-semibold">
                 <CheckCircle className="w-3.5 h-3.5" />
@@ -101,7 +74,6 @@ export const ProjectsSection: React.FC = () => {
                 historial de clientes y analítica de rentabilidad.
               </p>
 
-              {/* Feature checkmarks */}
               <div className="space-y-3">
                 {PROJECTS_DATA[0].features.map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-3 text-xs sm:text-sm text-slate-200">
@@ -113,7 +85,6 @@ export const ProjectsSection: React.FC = () => {
                 ))}
               </div>
 
-              {/* Metrics grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-800">
                 {PROJECTS_DATA[0].metrics.map((metric, idx) => (
                   <div key={idx} className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 text-center">
@@ -134,10 +105,8 @@ export const ProjectsSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Interactive Live Mockup of the System */}
             <div className="lg:col-span-7">
               <div className="rounded-2xl bg-slate-950 border border-slate-700/80 shadow-2xl overflow-hidden">
-                {/* Browser/Window Header */}
                 <div className="px-4 py-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
@@ -148,7 +117,6 @@ export const ProjectsSection: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* Sub-view switcher in mockup */}
                   <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
                     <button
                       onClick={() => setErpActiveView('dashboard')}
@@ -177,11 +145,9 @@ export const ProjectsSection: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Window Body: Interactive Views */}
                 <div className="p-5 sm:p-6 min-h-[360px] bg-slate-950/90 font-sans">
                   {erpActiveView === 'dashboard' && (
-                    <div className="space-y-5 animate-in fade-in duration-200">
-                      {/* Metric Cards in mockup */}
+                    <div className="space-y-5 transition-opacity duration-200">
                       <div className="grid grid-cols-3 gap-3">
                         <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
                           <span className="text-[11px] text-slate-400">Ventas Hoy</span>
@@ -200,7 +166,6 @@ export const ProjectsSection: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Mock Chart representation */}
                       <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-xs font-semibold text-white">Rendimiento Semanal de Ventas</span>
@@ -231,7 +196,7 @@ export const ProjectsSection: React.FC = () => {
                   )}
 
                   {erpActiveView === 'inventario' && (
-                    <div className="space-y-4 animate-in fade-in duration-200">
+                    <div className="space-y-4 transition-opacity duration-200">
                       <div className="flex items-center justify-between gap-3">
                         <div className="relative flex-1">
                           <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" />
@@ -274,7 +239,7 @@ export const ProjectsSection: React.FC = () => {
                   )}
 
                   {erpActiveView === 'ventas' && (
-                    <div className="space-y-4 animate-in fade-in duration-200">
+                    <div className="space-y-4 transition-opacity duration-200">
                       <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-white">Nueva Venta Directa</span>
@@ -309,9 +274,8 @@ export const ProjectsSection: React.FC = () => {
           </div>
         )}
 
-        {/* Project 2: Social Media Growth Case Study */}
         {activeProjectTab === 'social' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-300">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center transition-opacity duration-300">
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-cyan-950/70 text-cyan-400 border border-cyan-500/30 text-xs font-semibold">
                 <TrendingUp className="w-3.5 h-3.5" />
@@ -359,7 +323,6 @@ export const ProjectsSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Visual Social Campaign Preview Card */}
             <div className="lg:col-span-7">
               <div className="rounded-2xl bg-slate-950 border border-slate-700/80 p-6 shadow-2xl space-y-5">
                 <div className="flex items-center justify-between pb-4 border-b border-slate-800">
@@ -377,7 +340,6 @@ export const ProjectsSection: React.FC = () => {
                   </span>
                 </div>
 
-                {/* 3 Pillars cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                     <div className="text-xs font-bold text-sky-400 mb-1">1. Contenido de Valor</div>
@@ -399,7 +361,6 @@ export const ProjectsSection: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Conversion Funnel Bar */}
                 <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-slate-300 font-medium">Embudo de Conversión Digital:</span>

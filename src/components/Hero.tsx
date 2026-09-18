@@ -3,13 +3,13 @@ import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../data/companyData';
 import {
   ArrowRight,
   Sparkles,
-  CheckCircle2,
   CalendarCheck2,
   MessageCircle,
   TrendingUp,
   ShieldCheck,
   Layers,
 } from 'lucide-react';
+import { HeroFeatureCard } from './ui/HeroFeatureCard';
 
 interface HeroProps {
   onScheduleClick?: () => void;
@@ -83,41 +83,38 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
 
           {/* Feature Highlights Banner */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto text-left">
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-              <div className="flex items-center gap-2 mb-1.5 text-sky-400">
-                <Layers className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Proyectos Listos</span>
-              </div>
-              <p className="text-sm font-bold text-white">Sistema de Gestión ERP</p>
-              <p className="text-xs text-slate-400 mt-0.5">Control de stock, ventas y caja</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-              <div className="flex items-center gap-2 mb-1.5 text-cyan-400">
-                <TrendingUp className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Redes Sociales</span>
-              </div>
-              <p className="text-sm font-bold text-white">Estrategia de Alcance</p>
-              <p className="text-xs text-slate-400 mt-0.5">Visibilidad que genera clientes</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-              <div className="flex items-center gap-2 mb-1.5 text-emerald-400">
-                <ShieldCheck className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Enfoque 360°</span>
-              </div>
-              <p className="text-sm font-bold text-white">Transformación Total</p>
-              <p className="text-xs text-slate-400 mt-0.5">Software interno + ventas online</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-colors">
-              <div className="flex items-center gap-2 mb-1.5 text-blue-400">
-                <CalendarCheck2 className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Google Calendar</span>
-              </div>
-              <p className="text-sm font-bold text-white">Agendamiento Directo</p>
-              <p className="text-xs text-slate-400 mt-0.5">Sincroniza visitas y reuniones</p>
-            </div>
+            <HeroFeatureCard
+              icon={Layers}
+              label="Proyectos Listos"
+              title="Sistema de Gestión ERP"
+              description="Control de stock, ventas y caja"
+              accentClass="text-sky-400"
+              labelClass="text-slate-400"
+            />
+            <HeroFeatureCard
+              icon={TrendingUp}
+              label="Redes Sociales"
+              title="Estrategia de Alcance"
+              description="Visibilidad que genera clientes"
+              accentClass="text-cyan-400"
+              labelClass="text-slate-400"
+            />
+            <HeroFeatureCard
+              icon={ShieldCheck}
+              label="Enfoque 360°"
+              title="Transformación Total"
+              description="Software interno + ventas online"
+              accentClass="text-emerald-400"
+              labelClass="text-slate-400"
+            />
+            <HeroFeatureCard
+              icon={CalendarCheck2}
+              label="Google Calendar"
+              title="Agendamiento Directo"
+              description="Sincroniza visitas y reuniones"
+              accentClass="text-blue-400"
+              labelClass="text-slate-400"
+            />
           </div>
         </div>
       </div>
