@@ -20,11 +20,11 @@ export interface StatusMessage {
 const getStatusClasses = (type: StatusType) => {
   switch (type) {
     case 'success':
-      return 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200';
+      return 'status-banner status-banner--success';
     case 'error':
-      return 'bg-rose-950/60 border-rose-500/40 text-rose-200';
+      return 'status-banner status-banner--error';
     default:
-      return 'bg-sky-950/60 border-sky-500/40 text-sky-200';
+      return 'status-banner status-banner--info';
   }
 };
 

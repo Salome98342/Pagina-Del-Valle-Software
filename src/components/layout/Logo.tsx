@@ -15,10 +15,10 @@ export const Logo: React.FC<LogoProps> = ({
 }) => {
   // Dimensions
   const dimensionMap = {
-    sm: { icon: 32, text: 'text-lg', subtext: 'text-[9px]', gap: 'gap-2.5' },
-    md: { icon: 42, text: 'text-xl', subtext: 'text-[10px]', gap: 'gap-3' },
-    lg: { icon: 56, text: 'text-2xl sm:text-3xl', subtext: 'text-xs', gap: 'gap-3.5' },
-    xl: { icon: 84, text: 'text-4xl sm:text-5xl', subtext: 'text-sm', gap: 'gap-4' },
+    sm: { text: 'text-lg', subtext: 'text-[9px]', gap: 'gap-2.5' },
+    md: { text: 'text-xl', subtext: 'text-[10px]', gap: 'gap-3' },
+    lg: { text: 'text-2xl sm:text-3xl', subtext: 'text-xs', gap: 'gap-3.5' },
+    xl: { text: 'text-4xl sm:text-5xl', subtext: 'text-sm', gap: 'gap-4' },
   };
 
   const currentDim = dimensionMap[size];
@@ -28,10 +28,7 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <div className={`inline-flex items-center ${currentDim.gap} select-none ${className}`}>
       {/* Mountain Peaks Emblem matching company branding */}
-      <div
-        className="relative shrink-0 flex items-center justify-center"
-        style={{ width: currentDim.icon, height: currentDim.icon }}
-      >
+      <div className={`logo-icon logo-icon--${size}`}>
         <svg
           viewBox="0 0 120 80"
           fill="none"

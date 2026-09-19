@@ -173,18 +173,17 @@ export const ProjectsSection: React.FC = () => {
                         </div>
                         <div className="h-28 flex items-end justify-between gap-2 pt-4 px-2">
                           {[
-                            { day: 'Lun', height: '40%', val: '$1.8M' },
-                            { day: 'Mar', height: '65%', val: '$2.5M' },
-                            { day: 'Mie', height: '55%', val: '$2.1M' },
-                            { day: 'Jue', height: '80%', val: '$3.2M' },
-                            { day: 'Vie', height: '95%', val: '$4.1M' },
-                            { day: 'Sab', height: '70%', val: '$2.9M' },
-                            { day: 'Dom', height: '30%', val: '$1.1M' },
+                            { day: 'Lun', barClass: 'project-chart__bar--40', val: '$1.8M' },
+                            { day: 'Mar', barClass: 'project-chart__bar--65', val: '$2.5M' },
+                            { day: 'Mie', barClass: 'project-chart__bar--55', val: '$2.1M' },
+                            { day: 'Jue', barClass: 'project-chart__bar--80', val: '$3.2M' },
+                            { day: 'Vie', barClass: 'project-chart__bar--95', val: '$4.1M' },
+                            { day: 'Sab', barClass: 'project-chart__bar--70', val: '$2.9M' },
+                            { day: 'Dom', barClass: 'project-chart__bar--30', val: '$1.1M' },
                           ].map((item, idx) => (
                             <div key={idx} className="flex-1 flex flex-col items-center gap-1.5">
                               <div
-                                style={{ height: item.height }}
-                                className="w-full bg-gradient-to-t from-sky-600 to-cyan-400 rounded-t-md opacity-85 hover:opacity-100 transition-opacity"
+                                className={`project-chart__bar ${item.barClass}`}
                                 title={`${item.day}: ${item.val}`}
                               />
                               <span className="text-[10px] text-slate-400">{item.day}</span>

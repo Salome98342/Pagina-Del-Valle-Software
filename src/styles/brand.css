@@ -1,0 +1,47 @@
+.logo-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-icon--sm {
+  width: 2rem;
+  height: 2rem;
+}
+
+.logo-icon--md {
+  width: 2.625rem;
+  height: 2.625rem;
+}
+
+.logo-icon--lg {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.logo-icon--xl {
+  width: 5.25rem;
+  height: 5.25rem;
+}
+
+.project-chart__bar {
+  width: 100%;
+  border-radius: 0.375rem 0.375rem 0 0;
+  background: linear-gradient(to top, #0284c7, #67e8f9);
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.project-chart__bar:hover {
+  opacity: 1;
+}
+
+.project-chart__bar--30 { height: 30%; }
+.project-chart__bar--40 { height: 40%; }
+.project-chart__bar--55 { height: 55%; }
+.project-chart__bar--65 { height: 65%; }
+.project-chart__bar--70 { height: 70%; }
+.project-chart__bar--80 { height: 80%; }
+.project-chart__bar--95 { height: 95%; }

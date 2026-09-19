@@ -12,15 +12,13 @@ import {
 } from 'lucide-react';
 import { SectionHeader } from '../ui/SectionHeader';
 import { ContactStatusBanner, StatusMessage } from '../ui/ContactStatusBanner';
-import { PANEL_CARD, CTA_BUTTON } from '../ui/uiTokens';
 
 interface ContactSectionProps {
   selectedServicePreset?: string;
 }
 
-const FORM_FIELD_CLASS =
-  'w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors';
-const LABEL_CLASS = 'block text-xs font-semibold text-slate-300 mb-1.5';
+const FORM_FIELD_CLASS = 'form-field';
+const LABEL_CLASS = 'form-label';
 
 const getTomorrowDateString = () => {
   const d = new Date();
@@ -153,7 +151,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5 space-y-6">
-            <div className={`${PANEL_CARD} p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/40 shadow-xl space-y-6`}>
+            <div className="panel-card p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/40 shadow-xl space-y-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30">
                   <PhoneCall className="w-6 h-6 animate-pulse" />
@@ -202,7 +200,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
           </div>
 
           <div className="lg:col-span-7">
-            <div className={`${PANEL_CARD} p-6 sm:p-8 shadow-2xl space-y-6`}>
+            <div className="panel-card p-6 sm:p-8 shadow-2xl space-y-6">
               <div className="border-b border-slate-800 pb-4">
                 <h3 className="text-xl font-bold text-white">
                   Formulario de Solicitud de Visita & Diagnóstico
@@ -367,7 +365,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={CTA_BUTTON + ' w-full'}
+                    className="cta-button w-full py-3 px-5"
                   >
                     {isSubmitting ? (
                       <>
