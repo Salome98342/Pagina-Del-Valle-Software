@@ -52,11 +52,6 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#proyectos" className="hover:text-sky-400 transition-colors">
-                  Sistema de Gestión & Casos
-                </a>
-              </li>
-              <li>
                 <a href="#testimonios" className="hover:text-sky-400 transition-colors">
                   Testimonios de Clientes
                 </a>
@@ -86,10 +81,23 @@ export const Footer: React.FC = () => {
               <li>David Alejandro Escobar García</li>
               <li>Manuel Felipe Londoño Torres</li>
             </ul>
-            <div className="pt-2">
-              <span className="inline-block text-[11px] text-sky-400/90 bg-sky-950/40 border border-sky-500/20 px-2.5 py-1 rounded-md">
-                Próximamente redes sociales & correo oficial
-              </span>
+            <div className="pt-2 flex flex-wrap gap-2">
+              <a
+                href="https://www.instagram.com/delvallesoftware/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-md border border-sky-500/20 bg-sky-950/40 px-2.5 py-1 text-[11px] text-sky-400/90 transition-colors hover:border-sky-400/50 hover:text-sky-300"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://www.facebook.com/people/Del-Valle-Software/61594659355228/#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-md border border-sky-500/20 bg-sky-950/40 px-2.5 py-1 text-[11px] text-sky-400/90 transition-colors hover:border-sky-400/50 hover:text-sky-300"
+              >
+                Facebook
+              </a>
             </div>
           </div>
         </div>

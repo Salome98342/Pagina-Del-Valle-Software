@@ -3,7 +3,6 @@ import { Footer, Navbar } from './components/layout';
 import {
   ContactSection,
   Hero,
-  ProjectsSection,
   ServicesSection,
   TeamSection,
   TestimonialsSection,
@@ -33,7 +32,6 @@ export default function App() {
       <main>
         <Hero onScheduleClick={handleScheduleClick} />
         <ServicesSection onSelectService={handleSelectService} />
-        <ProjectsSection />
         <TestimonialsSection />
         <TeamSection />
         <ContactSection selectedServicePreset={selectedServicePreset} />
