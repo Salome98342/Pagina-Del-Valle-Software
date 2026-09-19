@@ -33,96 +33,66 @@ export const Logo: React.FC<LogoProps> = ({
         style={{ width: currentDim.icon, height: currentDim.icon }}
       >
         <svg
-          viewBox="0 0 100 80"
+          viewBox="0 0 120 80"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full drop-shadow-[0_4px_12px_rgba(14,165,233,0.35)]"
+          className="w-full h-full drop-shadow-[0_4px_12px_rgba(33,150,243,0.35)]"
         >
           <defs>
             {/* Gradients */}
-            <linearGradient id="leftPeakLight" x1="20" y1="65" x2="42" y2="15" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#0284C7" />
-              <stop offset="50%" stopColor="#0EA5E9" />
-              <stop offset="100%" stopColor="#38BDF8" />
+            <linearGradient id="leftPeakLight" x1="10" y1="70" x2="55" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#2196F3" />
+              <stop offset="55%" stopColor="#2196F3" />
+              <stop offset="100%" stopColor="#0D47A1" />
             </linearGradient>
 
-            <linearGradient id="leftPeakShadow" x1="42" y1="15" x2="35" y2="65" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#0369A1" />
-              <stop offset="100%" stopColor="#075985" />
+            <linearGradient id="leftPeakShadow" x1="55" y1="10" x2="45" y2="70" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#0D47A1" />
+              <stop offset="100%" stopColor="#1976D2" />
             </linearGradient>
 
-            <linearGradient id="rightPeakLight" x1="44" y1="65" x2="68" y2="24" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#0EA5E9" />
-              <stop offset="60%" stopColor="#38BDF8" />
-              <stop offset="100%" stopColor="#7DD3FC" />
+            <linearGradient id="rightPeakLight" x1="58" y1="70" x2="84" y2="18" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#64B5F6" />
+              <stop offset="55%" stopColor="#90CAF9" />
+              <stop offset="100%" stopColor="#E3F2FD" />
             </linearGradient>
 
-            <linearGradient id="rightPeakShadow" x1="68" y1="24" x2="58" y2="65" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#0284C7" />
-              <stop offset="100%" stopColor="#0369A1" />
+            <linearGradient id="rightPeakShadow" x1="84" y1="18" x2="75" y2="70" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#90CAF9" />
+              <stop offset="100%" stopColor="#2196F3" />
             </linearGradient>
           </defs>
 
-          {/* Left Peak - Outer Facet */}
-          <polygon
-            points="12,65 42,16 32,65"
-            fill="url(#leftPeakShadow)"
-          />
-
-          {/* Left Peak - Main Bright Slope */}
-          <polygon
-            points="42,16 54,65 32,65"
-            fill="url(#leftPeakLight)"
-          />
-
-          {/* Right Peak - Shadow Facet */}
-          <polygon
-            points="44,65 68,26 58,65"
-            fill="url(#rightPeakShadow)"
-          />
-
-          {/* Right Peak - Main Bright Slope */}
-          <polygon
-            points="68,26 88,65 58,65"
-            fill="url(#rightPeakLight)"
-          />
-
-          {/* Dynamic accent lines at base */}
-          <line
-            x1="8"
-            y1="67"
-            x2="92"
-            y2="67"
-            stroke="#0284C7"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            className="opacity-70"
-          />
+          {/* Dos picos entrelazados de la nueva marca */}
+          <path d="M4 69 47 10c4-5 10-5 14 0l31 36-13 14-25-29-32 38H4Z" fill="url(#leftPeakLight)" />
+          <path d="m4 69 50-38-25 38H4Z" fill="url(#leftPeakShadow)" />
+          <path d="m57 69 27-43c4-5 10-5 14 0l26 28V69H108L91 45 74 69H57Z" fill="url(#rightPeakLight)" />
+          <path d="m57 69 34-24-17 24H57Z" fill="url(#rightPeakShadow)" />
         </svg>
       </div>
 
       {/* Typography */}
       <div className="flex flex-col justify-center leading-none tracking-tight">
         <div className={`font-extrabold tracking-wider uppercase font-sans flex items-center gap-1.5 ${currentDim.text}`}>
-          <span className={isLight ? 'text-slate-900' : 'text-white'}>
+          <span className={isLight ? 'text-[#0d47a1]' : 'text-[#e3f2fd]'}>
             DEL
           </span>
-          <span className="text-sky-400 bg-gradient-to-r from-sky-400 to-cyan-300 bg-clip-text text-transparent">
+          <span className="text-sky-400 bg-gradient-to-r from-[#2196f3] to-[#90caf9] bg-clip-text text-transparent">
             VALLE
           </span>
         </div>
 
         {showSubtitle && (
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="w-2.5 h-[1.5px] bg-sky-500 rounded-full shrink-0"></span>
+            <span className="w-2.5 h-[1.5px] bg-[#2196f3] rounded-full shrink-0"></span>
             <span
               className={`font-semibold tracking-[0.25em] uppercase ${currentDim.subtext} ${
-                isLight ? 'text-slate-600' : 'text-slate-300'
+                isLight ? 'text-[#0d47a1]' : 'text-[#b8dcfa]'
               }`}
             >
               SOFTWARE
             </span>
-            <span className="w-2.5 h-[1.5px] bg-sky-500 rounded-full shrink-0"></span>
+            <span className="w-2.5 h-[1.5px] bg-[#2196f3] rounded-full shrink-0"></span>
           </div>
         )}
       </div>

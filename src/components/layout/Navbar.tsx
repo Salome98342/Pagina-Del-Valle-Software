@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="focus:outline-none focus:ring-2 focus:ring-sky-500 rounded-lg p-1">
-          <Logo size="md" />
+          <Logo size="md" theme="light" />
         </a>
 
         {/* Desktop Navigation Links */}

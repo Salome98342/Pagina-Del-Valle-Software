@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand Column */}
           <div className="md:col-span-2 space-y-4">
-            <Logo size="md" />
+            <Logo size="md" theme="light" />
             <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed mt-3">
               Soluciones integrales de software a medida, sistemas de gestión empresarial y posicionamiento
               digital en redes sociales. Desarrollado con dedicación para transformar e impulsar el trabajo

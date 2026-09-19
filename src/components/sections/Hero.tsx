@@ -32,11 +32,11 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center max-w-4xl mx-auto">
           {/* Trust Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-sky-500/30 text-sky-300 text-xs sm:text-sm font-medium mb-6 shadow-lg shadow-sky-950/40">
-            <Sparkles className="w-4 h-4 text-sky-400 animate-spin-slow" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-sky-500/30 text-sky-700 text-xs sm:text-sm font-medium mb-6 shadow-lg shadow-sky-950/40">
+            <Sparkles className="w-4 h-4 text-sky-600 animate-spin-slow" />
             <span>Transformación Digital & Software a Medida</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
-            <span className="text-slate-400 hidden sm:inline">Valle del Cauca & Colombia</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+            <span className="text-slate-600 hidden sm:inline">Valle del Cauca & Colombia</span>
           </div>
 
           {/* Main Headline */}
