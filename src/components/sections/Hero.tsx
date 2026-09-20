@@ -5,6 +5,8 @@ import {
   Sparkles,
   CalendarCheck2,
   MessageCircle,
+  Instagram,
+  Facebook,
   TrendingUp,
   ShieldCheck,
   Layers,
@@ -46,13 +48,13 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
 
           {/* Subtitle with user's core mission */}
           <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed mb-10">
-            En <strong className="text-white font-semibold">Del Valle Software</strong> desarrollamos
+            En <strong className="text-[#0d477a] font-bold">Del Valle Software</strong> desarrollamos
             sistemas de gestión que eliminan tareas repetitivas y gestionamos tus redes sociales con
             estrategia profesional para que tu empresa crezca de forma integral.
           </p>
 
           {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-7">
             <a
               id="hero-cta-agendar"
               href="#contacto"
@@ -76,6 +78,32 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
               <MessageCircle className="w-5 h-5 text-emerald-400" />
               <span>Hablar por WhatsApp ({COMPANY_PHONE})</span>
             </a>
+
+          </div>
+
+          <div className="mb-14">
+            <p className="text-sm font-semibold text-[#245d99] mb-3">Visita nuestras redes sociales</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="https://www.instagram.com/delvallesoftware/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-button hero-button--instagram w-full sm:w-auto px-6 py-3 text-sm"
+              >
+                <Instagram className="w-4 h-4" />
+                <span>Instagram</span>
+              </a>
+
+              <a
+                href="https://www.facebook.com/people/Del-Valle-Software/61594659355228/#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-button hero-button--facebook w-full sm:w-auto px-6 py-3 text-sm"
+              >
+                <Facebook className="w-4 h-4" />
+                <span>Facebook</span>
+              </a>
+            </div>
           </div>
 
           {/* Feature Highlights Banner */}

@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/appointments.js": {
+      "maxDuration": 30
+    }
+  }
+}

@@ -82,7 +82,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     specialty: 'Ingeniería de Software & Arquitectura de Datos',
     bio: 'Especialista en estructurar sistemas robustos, seguros y de alto rendimiento, optimizando bases de datos y la lógica de negocio detrás de nuestros sistemas de gestión.',
     avatarSeed: 'Sergio',
-    skills: ['System Architecture', 'Backend APIs', 'PostgreSQL & Cloud', 'Seguridad'],
+    skills: ['System Architecture', 'Backend APIs', 'Cloud', 'Seguridad'],
   },
   {
     name: 'Kevin Santiago Trejos Serrano',

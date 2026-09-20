@@ -1,6 +1,5 @@
 {
   "name": "Del Valle Software",
-  "description": "Landing page y plataforma de servicios para Del Valle Software: desarrollo a medida, sistemas de gestión y transformación digital.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "description": "Landing page de servicios para Del Valle Software.",
+  "requestFramePermissions": []
 }
