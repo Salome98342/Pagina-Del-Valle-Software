@@ -43,7 +43,13 @@ export const ContactStatusBanner: React.FC<StatusMessage> = ({
     >
       <div className="flex items-start gap-2.5">
         <Icon
-          className={`w-5 h-5 shrink-0 mt-0.5 ${type === 'success' ? 'text-emerald-400' : 'text-rose-400'}`}
+          className={`w-5 h-5 shrink-0 mt-0.5 ${
+            type === 'success'
+              ? 'text-emerald-600'
+              : type === 'error'
+                ? 'text-rose-600'
+                : 'text-sky-700'
+          }`}
         />
         <div className="space-y-1">
           <p className="font-bold">{text}</p>

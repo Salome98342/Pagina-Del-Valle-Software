@@ -1,0 +1,18 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Del Valle Software",
+  "url": "https://pagina-del-valle-software.vercel.app/",
+  "logo": "https://pagina-del-valle-software.vercel.app/LogoDelValleCompleto.png",
+  "description": "Del Valle Software crea sitios web, sistemas y soluciones digitales para empresas que quieren crecer con tecnología moderna, eficiente y a medida.",
+  "sameAs": [
+    "https://www.instagram.com/",
+    "https://www.linkedin.com/"
+  ],
+  "areaServed": "Mexico",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "sales",
+    "availableLanguage": ["Spanish", "English"]
+  }
+}
