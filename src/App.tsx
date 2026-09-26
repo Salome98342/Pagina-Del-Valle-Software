@@ -8,10 +8,12 @@ import {
   TestimonialsSection,
 } from './components/sections';
 import { COMPANY_PHONE_RAW } from './data/companyData';
+import { PortfolioPage } from './components/sections/TestimonialsSection';
 import { MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function App() {
   const [selectedServicePreset, setSelectedServicePreset] = useState<string>('');
+  if (window.location.pathname.replace(/\/$/, '') === '/portafolio') return <PortfolioPage />;
 
   const handleSelectService = (serviceTitle: string) => {
     setSelectedServicePreset(serviceTitle);
@@ -66,3 +68,4 @@ export default function App() {
     </div>
   );
 }
+

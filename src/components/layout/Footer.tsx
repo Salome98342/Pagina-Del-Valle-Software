@@ -52,8 +52,8 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#portafolio" className="hover:text-sky-400 transition-colors">
-                  Portafolio
+                <a href="/portafolio" className="hover:text-sky-400 transition-colors">
+                  Nuestros proyectos
                 </a>
               </li>
               <li>
@@ -113,3 +113,4 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+

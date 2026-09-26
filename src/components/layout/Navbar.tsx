@@ -20,7 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
 
   const navLinks = [
     { label: 'Servicios', href: '#servicios' },
-    { label: 'Portafolio', href: '#portafolio' },
+    { label: 'Nuestro portafolio', href: '/portafolio' },
     { label: 'Equipo', href: '#equipo' },
     { label: 'Contacto', href: '#contacto' },
   ];
@@ -59,3 +59,4 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
     </header>
   );
 };
+

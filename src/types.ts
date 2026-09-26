@@ -36,6 +36,7 @@ export interface ProjectShowcase {
   impact: string;
   features: string[];
   metrics: { label: string; value: string }[];
+  documentationUrl?: string;
 }
 
 export interface VisitRequestForm {

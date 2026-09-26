@@ -130,6 +130,7 @@ export const PROJECTS_DATA: ProjectShowcase[] = [
       { label: 'Área', value: 'Académica' },
       { label: 'Enfoque', value: 'RA / Gestión' },
     ],
+    documentationUrl: 'https://drive.google.com/drive/folders/1HEg8z7xuh99GJIVAoUXU8gpstnTG7qa5',
   },
   {
     id: 'psicoarte',
