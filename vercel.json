@@ -3,5 +3,11 @@
     "api/appointments.js": {
       "maxDuration": 30
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/portafolio",
+      "destination": "/"
+    }
+  ]
 }
