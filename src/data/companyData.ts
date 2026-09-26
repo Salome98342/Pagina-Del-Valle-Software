@@ -114,9 +114,9 @@ export const PROJECTS_DATA: ProjectShowcase[] = [
   {
     id: 'ra-manager',
     title: 'RA Manager',
-    category: 'Proyecto terminado · Universidad del Valle, sede Valle del Cauca',
+    category: 'Proyecto terminado · Universidad del Valle, seccional Eje Cafetero',
     description:
-      'Sistema de gestión de resultados de aprendizaje desarrollado para la Universidad del Valle, sede Valle del Cauca. El producto está orientado a digitalizar, organizar y centralizar la gestión académica para facilitar la evaluación y seguimiento de competencias por parte de la institución.',
+      'Sistema de gestión de resultados de aprendizaje desarrollado para la Universidad del Valle, seccional Eje Cafetero. El producto está orientado a digitalizar, organizar y centralizar la gestión académica para facilitar la evaluación y seguimiento de competencias por parte de la institución.',
     impact: 'Optimiza la administración y trazabilidad de resultados de aprendizaje en un entorno académico con procesos complejos y múltiples actores.',
     features: [
       'Gestión centralizada de resultados de aprendizaje y seguimiento académico',
