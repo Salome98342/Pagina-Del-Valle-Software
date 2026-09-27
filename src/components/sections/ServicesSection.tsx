@@ -3,6 +3,7 @@ import { SectionHeader } from '../ui/SectionHeader';
 import { AssessmentSelector } from '../ui/AssessmentSelector';
 import { SERVICE_PAGES } from './ServiceLandingPage';
 import { ArrowRight } from 'lucide-react';
+import { FadeInSection, StaggerContainer, StaggerItem } from '../ui/Reveal';
 
 interface ServicesSectionProps {
   onSelectService: (serviceTitle: string) => void;
@@ -68,6 +69,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
   return (
     <section id="servicios" className="py-24 bg-slate-950 text-slate-100 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <FadeInSection>
         <SectionHeader
           chip="Nuestros Servicios"
           title="Soluciones diseñadas para resolver problemas reales"
@@ -81,9 +83,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
               Conoce qué incluye cada solución y encuentra la que mejor responde a las necesidades de tu empresa.
             </p>
           </div>
-          <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <StaggerContainer className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {SERVICE_PAGES.map((page, index) => (
-              <li key={page.slug}>
+              <StaggerItem key={page.slug}>
                 <a
                   href={page.path}
                   className="group flex h-full min-h-64 flex-col rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-900/60 p-7 transition duration-300 hover:-translate-y-1 hover:border-sky-400/60 hover:shadow-xl hover:shadow-sky-950/30 focus:outline-none focus:ring-2 focus:ring-sky-400 sm:p-8"
@@ -97,9 +99,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                     Explorar servicio <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>
                 </a>
-              </li>
+              </StaggerItem>
             ))}
-          </ul>
+          </StaggerContainer>
         </nav>
 
         <AssessmentSelector
@@ -109,6 +111,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
           onRecommend={handleRecommend}
           recommendationText={recommendationText}
         />
+        </FadeInSection>
       </div>
     </section>
   );

@@ -3,11 +3,13 @@ import { TEAM_MEMBERS } from '../../data/companyData';
 import { SectionHeader } from '../ui/SectionHeader';
 import { TeamMemberCard } from '../ui/TeamMemberCard';
 import { ShieldCheck } from 'lucide-react';
+import { FadeInSection, StaggerContainer, StaggerItem } from '../ui/Reveal';
 
 export const TeamSection: React.FC = () => {
   return (
     <section id="equipo" className="py-24 bg-slate-900/40 border-t border-slate-800/80 text-slate-100 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <FadeInSection>
         <SectionHeader
           chip="Quiénes Somos"
           title="El equipo detrás de Del Valle Software"
@@ -15,11 +17,13 @@ export const TeamSection: React.FC = () => {
         />
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <StaggerContainer className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {TEAM_MEMBERS.map((member, idx) => (
-            <TeamMemberCard key={member.name} member={member} isWide={idx === 4} />
+            <StaggerItem key={member.name} className={idx === 4 ? 'sm:col-span-2 lg:col-span-1' : undefined}>
+              <TeamMemberCard member={member} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Commitment Statement Banner */}
         <div className="p-8 rounded-2xl bg-gradient-to-r from-sky-950/40 via-slate-900 to-sky-950/30 border border-sky-500/30 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -45,6 +49,7 @@ export const TeamSection: React.FC = () => {
             Iniciar Proyecto con Nosotros
           </a>
         </div>
+        </FadeInSection>
       </div>
     </section>
   );

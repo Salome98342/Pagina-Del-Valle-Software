@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
 import { PROJECTS_DATA } from '../../data/companyData';
 import { SectionHeader } from '../ui/SectionHeader';
 import { Navbar, Footer } from '../layout';
+import { FadeInSection, StaggerContainer, StaggerItem } from '../ui/Reveal';
 
 export const PortfolioPage: React.FC = () => {
   const [activeSlide, setActiveSlide] = useState<Record<string, number>>({
@@ -55,21 +56,22 @@ export const PortfolioPage: React.FC = () => {
   return (
     <div className="page-shell"><Navbar /><section className="min-h-screen pt-28 pb-24 bg-slate-950 text-slate-100 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <FadeInSection>
         <SectionHeader
           chip="Portafolio"
           title="Proyectos terminados y en desarrollo"
           subtitle="Una vista clara de las soluciones que hemos construido y de las plataformas que estamos desarrollando para organizaciones con objetivos reales de crecimiento."
         />
 
-        <div className="space-y-10">
+        <StaggerContainer className="space-y-10">
           {PROJECTS_DATA.map((project) => {
             const projectImages = getProjectImages(project.id);
             const currentImage = getCurrentProjectImage(project.id);
             const projectTitle = project.title;
 
             return (
+            <StaggerItem key={project.id}>
             <article
-              key={project.id}
               className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 shadow-[0_0_0_1px_rgba(15,23,42,0.5)]"
             >
               <div className="grid items-stretch lg:grid-cols-[1.35fr_1fr]">
@@ -157,9 +159,11 @@ export const PortfolioPage: React.FC = () => {
                 </div>
               </div>
             </article>
+            </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
+        </FadeInSection>
       </div>
       {expandedImage && (() => {
         const activeProjectId = Object.keys(projectImageSets).find((projectId) => projectImageSets[projectId].includes(expandedImage)) ?? 'ra-manager';
@@ -181,4 +185,4 @@ export const PortfolioPage: React.FC = () => {
   );
 };
 
-export const TestimonialsSection: React.FC = () => <section className="bg-slate-950 py-16 text-slate-100"><div className="mx-auto max-w-4xl px-4 text-center"><h2 className="text-2xl font-bold text-white sm:text-3xl">Conoce lo que estamos construyendo</h2><p className="mt-3 text-slate-300">Explora nuestros proyectos terminados y en desarrollo.</p><a href="/portafolio" className="mt-6 inline-flex rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 px-6 py-3 font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-105">Nuestro portafolio</a></div></section>;
+export const TestimonialsSection: React.FC = () => <FadeInSection><section className="bg-slate-950 py-16 text-slate-100"><div className="mx-auto max-w-4xl px-4 text-center"><h2 className="text-2xl font-bold text-white sm:text-3xl">Conoce lo que estamos construyendo</h2><p className="mt-3 text-slate-300">Explora nuestros proyectos terminados y en desarrollo.</p><a href="/portafolio" className="mt-6 inline-flex rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 px-6 py-3 font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-105">Nuestro portafolio</a></div></section></FadeInSection>;
