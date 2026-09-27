@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://del-valle-software.vercel.app/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://pagina-del-valle-software.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://pagina-del-valle-software.vercel.app/portafolio</loc>
+  </url>
+  <url>
+    <loc>https://pagina-del-valle-software.vercel.app/servicios/desarrollo-software</loc>
+  </url>
+  <url>
+    <loc>https://pagina-del-valle-software.vercel.app/servicios/paginas-web</loc>
+  </url>
+  <url>
+    <loc>https://pagina-del-valle-software.vercel.app/servicios/marketing-digital</loc>
+  </url>
+  <url>
+    <loc>https://pagina-del-valle-software.vercel.app/servicios/chatbots-automatizacion</loc>
+  </url>
+  <url>
+    <loc>https://pagina-del-valle-software.vercel.app/servicios/transformacion-digital</loc>
   </url>
 </urlset>

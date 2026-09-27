@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { SectionHeader } from '../ui/SectionHeader';
 import { ContactStatusBanner, StatusMessage } from '../ui/ContactStatusBanner';
+import { SERVICE_PAGES } from './ServiceLandingPage';
 
 interface ContactSectionProps {
   selectedServicePreset?: string;
@@ -280,9 +281,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                       onChange={handleInputChange}
                       className={FORM_FIELD_CLASS}
                     >
-                      {SERVICES_DATA.map((service) => (
-                        <option key={service.id} value={service.title}>
-                          {service.title}
+                      {[...SERVICES_DATA.map((service) => service.title), ...SERVICE_PAGES.map((page) => page.inquiry)]
+                        .filter((service, index, all) => all.indexOf(service) === index)
+                        .map((service) => (
+                        <option key={service} value={service}>
+                          {service}
                         </option>
                       ))}
                     </select>

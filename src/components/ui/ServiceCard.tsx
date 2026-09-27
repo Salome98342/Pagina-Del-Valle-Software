@@ -6,9 +6,10 @@ interface ServiceCardProps {
   service: ServiceItem;
   onSelectService: (serviceTitle: string) => void;
   getIcon: (iconName: string) => React.ReactNode;
+  detailHref: string;
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectService, getIcon }) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectService, getIcon, detailHref }) => {
   return (
     <div
       id={`service-card-${service.id}`}
@@ -44,8 +45,12 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectServi
       </div>
 
       <div className="mt-8 pt-6 border-t border-slate-800/60">
+        <a href={detailHref} className="mr-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-sky-300 transition-colors">
+          <span>Conocer el servicio</span>
+          <ArrowRight className="w-4 h-4" />
+        </a>
         <a
-          href="#contacto"
+          href={`/?servicio=${encodeURIComponent(service.title)}#contacto`}
           onClick={() => onSelectService(service.title)}
           className="inline-flex items-center gap-2 text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors"
         >

@@ -9,11 +9,16 @@ import {
 } from './components/sections';
 import { COMPANY_PHONE_RAW } from './data/companyData';
 import { PortfolioPage } from './components/sections/TestimonialsSection';
+import { ServiceLandingPage, SERVICE_PAGES } from './components/sections/ServiceLandingPage';
 import { MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function App() {
-  const [selectedServicePreset, setSelectedServicePreset] = useState<string>('');
-  if (window.location.pathname.replace(/\/$/, '') === '/portafolio') return <PortfolioPage />;
+  const requestedService = new URLSearchParams(window.location.search).get('servicio') || '';
+  const [selectedServicePreset, setSelectedServicePreset] = useState<string>(requestedService);
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  if (currentPath === '/portafolio') return <PortfolioPage />;
+  const servicePage = SERVICE_PAGES.find((page) => page.path === currentPath);
+  if (servicePage) return <ServiceLandingPage page={servicePage} />;
 
   const handleSelectService = (serviceTitle: string) => {
     setSelectedServicePreset(serviceTitle);
