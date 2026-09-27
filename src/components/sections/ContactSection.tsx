@@ -27,6 +27,14 @@ const getTomorrowDateString = () => {
   return d.toISOString().split('T')[0];
 };
 
+const getInitialDate = () => {
+  if (typeof document !== 'undefined') {
+    const prerenderedDate = document.querySelector<HTMLInputElement>('#contacto input[name="date"]')?.value;
+    if (prerenderedDate) return prerenderedDate;
+  }
+  return getTomorrowDateString();
+};
+
 const buildWhatsAppText = (formData: VisitRequestForm, appointment?: AppointmentResult | null) => {
   const location = appointment?.location || (formData.meetingType === 'virtual' ? 'Google Meet' : 'Calle 12');
   return [
@@ -59,7 +67,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
     email: '',
     serviceType: selectedServicePreset || SERVICES_DATA[0].title,
     meetingType: 'virtual',
-    date: getTomorrowDateString(),
+    date: getInitialDate(),
     time: '10:00',
     projectDetails: '',
   });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../../data/companyData';
 import {
@@ -21,7 +21,7 @@ const heroSequence = {
 
 const heroItem = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 const heroFeatures = {
@@ -34,6 +34,14 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
+  const [heroStage, setHeroStage] = useState<'static' | 'hidden' | 'visible'>('static');
+
+  useEffect(() => {
+    setHeroStage('hidden');
+    const frame = window.requestAnimationFrame(() => setHeroStage('visible'));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   return (
     <section id="inicio" className="hero-section pt-32 pb-20 md:pt-40 md:pb-28 text-slate-100">
       {/* Background ambient lighting effects matching Del Valle cyan/blue motif */}
@@ -47,8 +55,8 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
         <motion.div
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"
           variants={heroSequence}
-          initial="hidden"
-          animate="visible"
+          initial={false}
+          animate={heroStage === 'static' ? undefined : heroStage}
         >
         <div className="text-center max-w-4xl mx-auto">
           {/* Trust Badge */}
@@ -169,7 +177,7 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
               labelClass="text-slate-400"
             />
             </motion.div>
-          </div>
+          </motion.div>
         </div>
         </motion.div>
     </section>

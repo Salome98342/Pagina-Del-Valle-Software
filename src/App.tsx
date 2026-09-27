@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Footer, Navbar } from './components/layout';
 import {
   ContactSection,
@@ -13,9 +13,13 @@ import { ServiceLandingPage, SERVICE_PAGES } from './components/sections/Service
 import { MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function App() {
-  const requestedService = new URLSearchParams(window.location.search).get('servicio') || '';
-  const [selectedServicePreset, setSelectedServicePreset] = useState<string>(requestedService);
-  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  const [selectedServicePreset, setSelectedServicePreset] = useState<string>('');
+  const currentPath = typeof window === 'undefined' ? '/' : window.location.pathname.replace(/\/$/, '') || '/';
+
+  useEffect(() => {
+    const requestedService = new URLSearchParams(window.location.search).get('servicio');
+    if (requestedService) setSelectedServicePreset(requestedService);
+  }, []);
   if (currentPath === '/portafolio') return <PortfolioPage />;
   const servicePage = SERVICE_PAGES.find((page) => page.path === currentPath);
   if (servicePage) return <ServiceLandingPage page={servicePage} />;

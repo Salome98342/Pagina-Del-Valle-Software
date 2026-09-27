@@ -31,6 +31,7 @@ const serviceHtmlPlugin = () => ({
       platform: 'node',
       format: 'esm',
       packages: 'external',
+      define: { 'import.meta.env': JSON.stringify({ VITE_APPOINTMENT_API_URL: '/api' }) },
       write: false,
       logLevel: 'silent',
     });
@@ -40,6 +41,8 @@ const serviceHtmlPlugin = () => ({
     try {
       const renderer = await import(`${pathToFileURL(rendererPath).href}?build=${Date.now()}`);
       const markupBySlug = new Map(renderer.renderServicePages().map((page: { slug: string; markup: string }) => [page.slug, page.markup]));
+      const homeMarkup = renderer.renderHomePage();
+      fs.writeFileSync(templatePath, template.replace('<div id="root"></div>', `<div id="root">${homeMarkup}</div>`));
 
       for (const service of serviceSeo) {
           const canonical = `${SEO_ORIGIN}/servicios/${service.slug}`;
