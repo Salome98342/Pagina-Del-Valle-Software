@@ -25,6 +25,16 @@ export const PortfolioPage: React.FC = () => {
     psicoarte: Array.from({ length: 5 }, (_, index) => `/Psicoarte${index + 1}.png`),
   };
 
+const projectImageSizes: Record<string, [number, number]> = {
+  '/Ra1.png': [1916, 922], '/Ra2.png': [1896, 922], '/Ra3.png': [1917, 927],
+  '/Ra4.png': [1600, 575], '/Ra5.png': [1902, 912], '/Ra6.png': [1897, 922],
+  '/Psicoarte1.png': [1862, 919], '/Psicoarte2.png': [1857, 900],
+  '/Psicoarte3.png': [1855, 882], '/Psicoarte4.png': [1848, 871], '/Psicoarte5.png': [420, 825],
+};
+
+const getProjectImageSize = (src: string): [number, number] => projectImageSizes[src] ?? [1600, 900];
+const getWebpSource = (src: string) => src.replace(/\.png$/i, '.webp');
+
   const getProjectImages = (projectId: string) => projectImageSets[projectId] ?? [];
 
   const getCurrentProjectImage = (projectId: string) => {
@@ -78,15 +88,22 @@ export const PortfolioPage: React.FC = () => {
                 <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 sm:p-6 lg:p-8">
                   {projectImages.length > 0 ? (
                     <div className="relative flex min-h-[280px] items-center justify-center overflow-hidden rounded-2xl border border-slate-700 bg-slate-950/60 shadow-lg shadow-slate-950/30 sm:min-h-[360px] lg:sticky lg:top-28 lg:min-h-[520px] lg:max-w-[1100px] lg:mx-auto">
-                      <img
-                        src={currentImage}
-                        alt={`${projectTitle} - vista ${((activeSlide[project.id] ?? 0) + 1)}`}
-                        className="h-full max-h-[720px] min-h-[280px] w-full cursor-zoom-in object-contain sm:min-h-[360px] lg:min-h-[520px]"
-                        onClick={() => setExpandedImage(currentImage)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') setExpandedImage(currentImage); }}
-                      />
+                      <picture className="h-full w-full">
+                        <source srcSet={getWebpSource(currentImage)} type="image/webp" />
+                        <img
+                          src={currentImage}
+                          alt={`${projectTitle} - vista ${((activeSlide[project.id] ?? 0) + 1)}`}
+                          width={getProjectImageSize(currentImage)[0]}
+                          height={getProjectImageSize(currentImage)[1]}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full max-h-[720px] min-h-[280px] w-full cursor-zoom-in object-contain sm:min-h-[360px] lg:min-h-[520px]"
+                          onClick={() => setExpandedImage(currentImage)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') setExpandedImage(currentImage); }}
+                        />
+                      </picture>
 
                       <button type="button" onClick={() => setExpandedImage(currentImage)} className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full border border-blue-950/30 bg-white/90 px-3 py-2 text-xs font-semibold text-blue-950 shadow-[0_8px_24px_rgba(2,6,23,0.35)] backdrop-blur-md hover:bg-sky-100" aria-label="Ampliar imagen"><ZoomIn className="h-4 w-4 text-blue-950" /> Ver ampliada</button>
 
@@ -175,7 +192,19 @@ export const PortfolioPage: React.FC = () => {
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 sm:p-8" onClick={() => setExpandedImage(null)} role="dialog" aria-modal="true" aria-label="Carrusel de imágenes ampliadas">
             <button type="button" onClick={() => setExpandedImage(null)} className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-slate-900/80 p-3 text-white hover:bg-slate-700" aria-label="Cerrar imagen"><X className="h-6 w-6" /></button>
             <button type="button" onClick={(event) => { event.stopPropagation(); const prevIndex = (activeIndex - 1 + images.length) % images.length; const nextImage = images[prevIndex]; setExpandedImage(nextImage); setActiveSlide((prev) => ({ ...prev, [activeProjectId]: prevIndex })); }} className="absolute left-3 sm:left-8 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-sky-600 text-white shadow-xl shadow-black/50 transition hover:bg-sky-500" aria-label="Imagen anterior"><ChevronLeft className="h-7 w-7 text-white" strokeWidth={3} /></button>
-            <img src={expandedImage} alt={`${currentProjectTitle} - imagen ${activeIndex + 1} de ${images.length}`} className="max-h-full max-w-[calc(100%-6rem)] object-contain" onClick={(event) => event.stopPropagation()} />
+            <picture className="flex h-full w-full items-center justify-center">
+              <source srcSet={getWebpSource(expandedImage)} type="image/webp" />
+              <img
+                src={expandedImage}
+                alt={`${currentProjectTitle} - imagen ${activeIndex + 1} de ${images.length}`}
+                width={getProjectImageSize(expandedImage)[0]}
+                height={getProjectImageSize(expandedImage)[1]}
+                loading="lazy"
+                decoding="async"
+                className="max-h-full max-w-[calc(100%-6rem)] object-contain"
+                onClick={(event) => event.stopPropagation()}
+              />
+            </picture>
             <button type="button" onClick={(event) => { event.stopPropagation(); const nextIndex = (activeIndex + 1) % images.length; const nextImage = images[nextIndex]; setExpandedImage(nextImage); setActiveSlide((prev) => ({ ...prev, [activeProjectId]: nextIndex })); }} className="absolute right-3 sm:right-8 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-sky-600 text-white shadow-xl shadow-black/50 transition hover:bg-sky-500" aria-label="Siguiente imagen"><ChevronRight className="h-7 w-7 text-white" strokeWidth={3} /></button>
             <span className="absolute bottom-4 rounded-full bg-slate-900/80 px-3 py-1 text-sm text-white">{activeIndex + 1} / {images.length}</span>
           </div>
