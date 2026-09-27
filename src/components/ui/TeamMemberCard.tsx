@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { TeamMember } from '../../types';
 
 interface TeamMemberCardProps {
@@ -8,8 +9,10 @@ interface TeamMemberCardProps {
 
 export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, isWide = false }) => {
   return (
-    <div
-      className={`p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-sky-500/40 transition-all duration-300 flex flex-col justify-between group ${
+    <motion.div
+      whileHover={{ scale: 1.025 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+      className={`p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-sky-500/40 transition-colors duration-300 flex flex-col justify-between group ${
         isWide ? 'sm:col-span-2 lg:col-span-1' : ''
       }`}
     >
@@ -46,6 +49,6 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, isWide =
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

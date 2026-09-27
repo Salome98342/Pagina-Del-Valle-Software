@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { ServiceItem } from '../../types';
 
@@ -11,9 +12,12 @@ interface ServiceCardProps {
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectService, getIcon, detailHref }) => {
   return (
-    <div
+    <motion.div
       id={`service-card-${service.id}`}
-      className="group relative flex flex-col justify-between p-8 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-sky-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-sky-950/40"
+      whileHover={{ scale: 1.025 }}
+      whileTap={{ scale: 0.99 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+      className="group relative flex flex-col justify-between p-8 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-sky-500/40 transition-colors duration-300 hover:shadow-xl hover:shadow-sky-950/40"
     >
       <div>
         <div className="flex items-center justify-between gap-4 mb-5">
@@ -58,6 +62,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectServi
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 };

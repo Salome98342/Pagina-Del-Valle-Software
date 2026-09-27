@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { CheckCircle2, Quote, Star } from 'lucide-react';
 import { Testimonial } from '../../types';
 
@@ -8,7 +9,11 @@ interface TestimonialCardProps {
 
 export const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
   return (
-    <div className="flex flex-col justify-between p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/30 transition-all duration-300 relative group">
+    <motion.div
+      whileHover={{ scale: 1.025 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+      className="flex flex-col justify-between p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/30 transition-colors duration-300 relative group"
+    >
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
@@ -38,6 +43,6 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial })
           {testimonial.serviceReceived}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 };
