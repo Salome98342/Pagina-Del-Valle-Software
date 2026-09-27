@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Footer, Navbar } from './components/layout';
 import {
   ContactSection,
+  AboutTeaser,
   Hero,
   ServicesSection,
-  TeamSection,
   TestimonialsSection,
 } from './components/sections';
 import { COMPANY_PHONE_RAW } from './data/companyData';
 import { PortfolioPage } from './components/sections/TestimonialsSection';
 import { ServiceLandingPage, SERVICE_PAGES } from './components/sections/ServiceLandingPage';
+import { AboutPage } from './components/sections/AboutPage';
 import { MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
     if (requestedService) setSelectedServicePreset(requestedService);
   }, []);
   if (currentPath === '/portafolio') return <PortfolioPage />;
+  if (currentPath === '/nosotros') return <AboutPage />;
   const servicePage = SERVICE_PAGES.find((page) => page.path === currentPath);
   if (servicePage) return <ServiceLandingPage page={servicePage} />;
 
@@ -44,7 +46,7 @@ export default function App() {
         <Hero onScheduleClick={handleScheduleClick} />
         <ServicesSection onSelectService={handleSelectService} />
         <TestimonialsSection />
-        <TeamSection />
+        <AboutTeaser />
         <ContactSection selectedServicePreset={selectedServicePreset} />
       </main>
 

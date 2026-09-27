@@ -13,6 +13,10 @@ const serviceSeo = [
   { slug: 'chatbots-automatizacion', title: 'Chatbots y automatización de procesos empresariales | Del Valle Software', description: 'Diseñamos flujos automatizados y chatbots para organizar consultas, reducir tareas manuales y apoyar la operación de tu empresa.' },
   { slug: 'transformacion-digital', title: 'Transformación digital para empresas en Colombia | Del Valle Software', description: 'Conectamos procesos, software y canales digitales en una ruta de transformación ajustada a las necesidades de cada empresa.' },
 ];
+const aboutSeo = {
+  title: 'Nosotros | Del Valle Software',
+  description: 'Conoce al equipo de Del Valle Software, nuestra misión, visión, valores y los proyectos con los que impulsamos negocios mediante tecnología.',
+};
 
 const escapeHtml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
@@ -42,7 +46,34 @@ const serviceHtmlPlugin = () => ({
       const renderer = await import(`${pathToFileURL(rendererPath).href}?build=${Date.now()}`);
       const markupBySlug = new Map(renderer.renderServicePages().map((page: { slug: string; markup: string }) => [page.slug, page.markup]));
       const homeMarkup = renderer.renderHomePage();
+      const aboutMarkup = renderer.renderAboutPage();
       fs.writeFileSync(templatePath, template.replace('<div id="root"></div>', `<div id="root">${homeMarkup}</div>`));
+
+      const aboutCanonical = `${SEO_ORIGIN}/nosotros`;
+      const aboutTitle = escapeHtml(aboutSeo.title);
+      const aboutDescription = escapeHtml(aboutSeo.description);
+      const aboutSchema = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        name: aboutSeo.title,
+        description: aboutSeo.description,
+        url: aboutCanonical,
+        mainEntity: { '@type': 'Organization', name: 'Del Valle Software', url: `${SEO_ORIGIN}/` },
+      }, null, 2);
+      const aboutHtml = template
+        .replace(/<title>[^<]*<\/title>/, `<title>${aboutTitle}</title>`)
+        .replace(/<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${aboutDescription}" />`)
+        .replace(/<meta property="og:title" content="[^"]*"\s*\/>/, `<meta property="og:title" content="${aboutTitle}" />`)
+        .replace(/<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${aboutDescription}" />`)
+        .replace(/<meta property="og:url" content="[^"]*"\s*\/>/, `<meta property="og:url" content="${aboutCanonical}" />`)
+        .replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${aboutTitle}" />`)
+        .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${aboutDescription}" />`)
+        .replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${aboutCanonical}" />`)
+        .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">\n${aboutSchema}\n    </script>`)
+        .replace('<div id="root"></div>', `<div id="root">${aboutMarkup}</div>`);
+      const aboutDir = path.join(dist, 'nosotros');
+      fs.mkdirSync(aboutDir, { recursive: true });
+      fs.writeFileSync(path.join(aboutDir, 'index.html'), aboutHtml);
 
       for (const service of serviceSeo) {
           const canonical = `${SEO_ORIGIN}/servicios/${service.slug}`;

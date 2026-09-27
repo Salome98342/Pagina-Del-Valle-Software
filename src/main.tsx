@@ -8,7 +8,7 @@ const app = <StrictMode><MotionConfig reducedMotion="user"><App /></MotionConfig
 const rootElement = document.getElementById('root')!;
 const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
 
-if (currentPath === '/' || currentPath.startsWith('/servicios/')) {
+if (currentPath === '/' || currentPath === '/nosotros' || currentPath.startsWith('/servicios/')) {
   hydrateRoot(rootElement, app);
 } else {
   rootElement.replaceChildren();

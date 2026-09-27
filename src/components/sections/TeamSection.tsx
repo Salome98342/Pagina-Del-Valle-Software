@@ -43,7 +43,7 @@ export const TeamSection: React.FC = () => {
           </div>
 
           <a
-            href="#contacto"
+            href="/#contacto"
             className="shrink-0 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-sky-600 hover:bg-sky-500 shadow-lg shadow-sky-950 transition-colors"
           >
             Iniciar Proyecto con Nosotros
