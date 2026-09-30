@@ -4,11 +4,7 @@ import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '../../data/companyData';
 import { Logo } from './Logo';
 import { NavLinkItem } from '../ui/NavLinkItem';
 
-interface NavbarProps {
-  onOpenBooking?: () => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
+export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -20,9 +16,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
 
   const navLinks = [
     { label: 'Servicios', href: '/#servicios' },
-    { label: 'Nuestro portafolio', href: '/portafolio' },
+    { label: 'Nuestro Portafolio', href: '/portafolio' },
     { label: 'Nosotros', href: '/nosotros' },
-    { label: 'Contacto', href: '/#contacto' },
+    { label: 'Agendar Cita', href: '/agendar-cita' },
   ];
 
   return (
@@ -36,8 +32,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           <a href={`tel:${COMPANY_PHONE_RAW}`} className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-full transition-all" title="Llamada directa">
             <PhoneCall className="w-3.5 h-3.5 text-sky-400 animate-pulse" /><span>{COMPANY_PHONE}</span>
           </a>
-          <a href="/#contacto" onClick={onOpenBooking} className="flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 rounded-full shadow-md shadow-sky-500/20 hover:shadow-sky-500/30 transition-all hover:scale-105 active:scale-95">
-            <Calendar className="w-4 h-4" /><span>Agendar Visita</span>
+          <a href="/agendar-cita" className="flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 rounded-full shadow-md shadow-sky-500/20 hover:shadow-sky-500/30 transition-all hover:scale-105 active:scale-95">
+            <Calendar className="w-4 h-4" /><span>Agendar Cita</span>
           </a>
         </div>
         <div className="flex items-center gap-2 md:hidden">
@@ -52,11 +48,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           <div className="space-y-1">{navLinks.map((link) => <NavLinkItem key={link.label} {...link} mobile onClick={() => setMobileMenuOpen(false)} />)}</div>
           <div className="pt-3 border-t border-slate-800 space-y-2.5">
             <a href={`tel:${COMPANY_PHONE_RAW}`} className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-slate-900 text-slate-200 border border-slate-800"><PhoneCall className="w-4 h-4 text-sky-400" /><span>Llamar: {COMPANY_PHONE}</span></a>
-            <a href="#contacto" onClick={() => { setMobileMenuOpen(false); onOpenBooking?.(); }} className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md shadow-sky-500/25"><Calendar className="w-4 h-4" /><span>Agendar Visita / Diagnóstico</span></a>
+            <a href="/agendar-cita" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md shadow-sky-500/25"><Calendar className="w-4 h-4" /><span>Agendar Cita</span></a>
           </div>
         </div>
       )}
     </header>
   );
 };
-

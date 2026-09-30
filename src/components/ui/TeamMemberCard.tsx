@@ -12,7 +12,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, isWide =
     <motion.div
       whileHover={{ scale: 1.025 }}
       transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-      className={`p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-sky-500/40 transition-colors duration-300 flex flex-col justify-between group ${
+      className={`h-full min-h-[28rem] p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-sky-500/40 transition-colors duration-300 flex flex-col group ${
         isWide ? 'sm:col-span-2 lg:col-span-1' : ''
       }`}
     >
@@ -20,11 +20,13 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, isWide =
         <div className="flex items-center gap-4 mb-4">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-600 to-cyan-500 p-0.5 shadow-md shadow-sky-950">
             <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center font-bold text-white text-lg group-hover:scale-105 transition-transform">
-              {member.name
-                .split(' ')
-                .slice(0, 2)
-                .map((n) => n[0])
-                .join('')}
+              <span
+                role="img"
+                aria-label={`Rol de ${member.name}`}
+                className="inline-block saturate-0 hue-rotate-[165deg] brightness-125"
+              >
+                {member.avatarEmoji}
+              </span>
             </div>
           </div>
           <div>
@@ -34,10 +36,10 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, isWide =
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">{member.bio}</p>
+        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{member.bio}</p>
       </div>
 
-      <div className="pt-4 border-t border-slate-800/80">
+      <div className="mt-5 pt-4 border-t border-slate-800/80">
         <div className="flex flex-wrap gap-1.5">
           {member.skills.map((skill, sIdx) => (
             <span

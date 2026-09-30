@@ -26,7 +26,7 @@ export const AssessmentSelector: React.FC<AssessmentSelectorProps> = ({
     <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-950 border border-sky-500/25 shadow-2xl relative overflow-hidden">
       <div className="absolute -right-16 -top-16 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-3xl">
+      <div className="w-full">
         <div className="flex items-center gap-2.5 mb-3 text-sky-400">
           <span className="text-xs font-bold uppercase tracking-wider">
             Diagnóstico Rápido de Necesidades
@@ -76,11 +76,11 @@ export const AssessmentSelector: React.FC<AssessmentSelectorProps> = ({
           </div>
 
           <a
-            href="#contacto"
+            href={`/agendar-cita?servicio=${encodeURIComponent(recommendationText)}`}
             onClick={onRecommend}
             className="shrink-0 px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold text-white bg-sky-600 hover:bg-sky-500 transition-colors flex items-center gap-2"
           >
-            <span>Agendar Visita para esta Solución</span>
+            <span>Agendar Cita para esta Solución</span>
             <ArrowRight className="w-4 h-4" />
           </a>
         </div>

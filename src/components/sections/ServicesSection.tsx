@@ -5,11 +5,7 @@ import { SERVICE_PAGES } from './ServiceLandingPage';
 import { ArrowRight } from 'lucide-react';
 import { FadeInSection, StaggerContainer, StaggerItem } from '../ui/Reveal';
 
-interface ServicesSectionProps {
-  onSelectService: (serviceTitle: string) => void;
-}
-
-export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectService }) => {
+export const ServicesSection: React.FC = () => {
   const [selectedNeeds, setSelectedNeeds] = useState<string[]>([
     'control-inventario',
     'visibilidad-redes',
@@ -63,7 +59,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
         : painPoints.find((p) => selectedNeeds.includes(p.id))?.recommended ||
           'Sistemas de Gestión a Medida (ERP & CRM)';
 
-    onSelectService(rec);
+    window.location.assign(`/agendar-cita?servicio=${encodeURIComponent(rec)}`);
   };
 
   return (
@@ -83,12 +79,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
               Conoce qué incluye cada solución y encuentra la que mejor responde a las necesidades de tu empresa.
             </p>
           </div>
-          <StaggerContainer className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <StaggerContainer className="grid items-start grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-6">
             {SERVICE_PAGES.map((page, index) => (
-              <StaggerItem key={page.slug}>
+              <StaggerItem
+                key={page.slug}
+                className={`xl:col-span-2 ${index === 3 ? 'xl:col-start-2' : ''} ${index === 4 ? 'xl:col-start-4' : ''}`}
+              >
                 <a
                   href={page.path}
-                  className="group flex h-full min-h-64 flex-col rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-900/60 p-7 transition duration-300 hover:-translate-y-1 hover:border-sky-400/60 hover:shadow-xl hover:shadow-sky-950/30 focus:outline-none focus:ring-2 focus:ring-sky-400 sm:p-8"
+                  className="group flex flex-col rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-900/60 p-7 transition duration-300 hover:-translate-y-1 hover:border-sky-400/60 hover:shadow-xl hover:shadow-sky-950/30 focus:outline-none focus:ring-2 focus:ring-sky-400 sm:p-8"
                 >
                   <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-sky-400/10 text-sm font-bold text-sky-300">
                     {String(index + 1).padStart(2, '0')}

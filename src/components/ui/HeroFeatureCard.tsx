@@ -24,7 +24,7 @@ export const HeroFeatureCard: React.FC<HeroFeatureCardProps> = ({
         <Icon className="w-4 h-4" />
         <span className={`text-xs font-semibold uppercase tracking-wider ${labelClass}`}>{label}</span>
       </div>
-      <p className="text-sm font-bold text-white">{title}</p>
+      <p className="text-sm font-bold text-sky-300">{title}</p>
       <p className="text-xs text-slate-400 mt-0.5">{description}</p>
     </div>
   );

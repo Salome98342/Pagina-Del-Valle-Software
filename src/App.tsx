@@ -1,38 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Footer, Navbar } from './components/layout';
 import {
-  ContactSection,
-  AboutTeaser,
   Hero,
   ServicesSection,
-  TestimonialsSection,
 } from './components/sections';
 import { COMPANY_PHONE_RAW } from './data/companyData';
 import { PortfolioPage } from './components/sections/TestimonialsSection';
 import { ServiceLandingPage, SERVICE_PAGES } from './components/sections/ServiceLandingPage';
 import { AboutPage } from './components/sections/AboutPage';
+import { BookingPage } from './components/sections/BookingPage';
 import { MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function App() {
-  const [selectedServicePreset, setSelectedServicePreset] = useState<string>('');
   const currentPath = typeof window === 'undefined' ? '/' : window.location.pathname.replace(/\/$/, '') || '/';
 
-  useEffect(() => {
-    const requestedService = new URLSearchParams(window.location.search).get('servicio');
-    if (requestedService) setSelectedServicePreset(requestedService);
-  }, []);
+  if (currentPath === '/agendar-cita') return <BookingPage />;
   if (currentPath === '/portafolio') return <PortfolioPage />;
   if (currentPath === '/nosotros') return <AboutPage />;
   const servicePage = SERVICE_PAGES.find((page) => page.path === currentPath);
   if (servicePage) return <ServiceLandingPage page={servicePage} />;
-
-  const handleSelectService = (serviceTitle: string) => {
-    setSelectedServicePreset(serviceTitle);
-  };
-
-  const handleScheduleClick = () => {
-    setSelectedServicePreset('');
-  };
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -43,11 +29,8 @@ export default function App() {
       <Navbar />
 
       <main>
-        <Hero onScheduleClick={handleScheduleClick} />
-        <ServicesSection onSelectService={handleSelectService} />
-        <TestimonialsSection />
-        <AboutTeaser />
-        <ContactSection selectedServicePreset={selectedServicePreset} />
+        <Hero />
+        <ServicesSection />
       </main>
 
       <Footer />
@@ -79,4 +62,3 @@ export default function App() {
     </div>
   );
 }
-

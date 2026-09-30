@@ -17,7 +17,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectServi
       whileHover={{ scale: 1.025 }}
       whileTap={{ scale: 0.99 }}
       transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-      className="group relative flex flex-col justify-between p-8 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-sky-500/40 transition-colors duration-300 hover:shadow-xl hover:shadow-sky-950/40"
+      className="group relative flex flex-col p-8 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-sky-500/40 transition-colors duration-300 hover:shadow-xl hover:shadow-sky-950/40"
     >
       <div>
         <div className="flex items-center justify-between gap-4 mb-5">
@@ -54,7 +54,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelectServi
           <ArrowRight className="w-4 h-4" />
         </a>
         <a
-          href={`/?servicio=${encodeURIComponent(service.title)}#contacto`}
+          href={`/agendar-cita?servicio=${encodeURIComponent(service.title)}`}
           onClick={() => onSelectService(service.title)}
           className="inline-flex items-center gap-2 text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors"
         >
