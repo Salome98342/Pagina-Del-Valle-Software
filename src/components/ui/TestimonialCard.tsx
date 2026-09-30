@@ -12,7 +12,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial })
     <motion.div
       whileHover={{ scale: 1.025 }}
       transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-      className="flex flex-col justify-between p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/30 transition-colors duration-300 relative group"
+      className="flex flex-col p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/30 transition-colors duration-300 relative group"
     >
       <div className="space-y-4">
         <div className="flex items-center justify-between">

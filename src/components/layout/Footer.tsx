@@ -62,8 +62,8 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="/#contacto" className="hover:text-sky-400 transition-colors">
-                  Agendar Visita
+                <a href="/agendar-cita" className="hover:text-sky-400 transition-colors">
+                  Agendar Cita
                 </a>
               </li>
             </ul>
@@ -113,4 +113,3 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
-

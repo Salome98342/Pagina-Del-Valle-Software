@@ -107,7 +107,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
       const result = await submitAppointment();
       setStatusMessage({
         type: 'success',
-        text: '¡Visita agendada y enviada por correo!',
+        text: '¡Cita agendada y enviada por correo!',
         details:
           'La empresa y el correo indicado recibieron la invitación de calendario. Usa WhatsApp para compartir exactamente la misma información.',
         calendarUrl: result.calendarUrl,
@@ -130,7 +130,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
         currentAppointment = await submitAppointment();
         setStatusMessage({
           type: 'success',
-          text: '¡Visita agendada y enviada por correo!',
+          text: '¡Cita agendada y enviada por correo!',
           details: 'Ahora abriremos WhatsApp con los mismos datos y enlaces de la cita.',
           calendarUrl: currentAppointment.calendarUrl,
         });
@@ -153,8 +153,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <SectionHeader
-          chip="Contacto & Agendamiento"
-          title="Agenda tu visita o diagnóstico tecnológico"
+          chip="Agendamiento"
+          title="Agenda tu cita"
           subtitle="Cuéntanos sobre tu negocio. Enviaremos la invitación a tu calendario y al correo de Del Valle Software."
         />
 
@@ -212,7 +212,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
             <div className="panel-card p-6 sm:p-8 shadow-2xl space-y-6">
               <div className="border-b border-slate-800 pb-4">
                 <h3 className="text-xl font-bold text-white">
-                  Formulario de Solicitud de Visita & Diagnóstico
+                  Formulario para Agendar Cita
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-400 mt-1">
                   Completa los campos para coordinar el horario más cómodo para tu equipo.
@@ -300,7 +300,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                   </div>
 
                   <div>
-                    <label className={LABEL_CLASS}>Modalidad de Visita</label>
+                    <label className={LABEL_CLASS}>                    Modalidad de la Cita</label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
@@ -333,7 +333,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className={LABEL_CLASS}>Fecha sugerida para la visita</label>
+                    <label className={LABEL_CLASS}>Fecha sugerida para la cita</label>
                     <input
                       type="date"
                       name="date"
@@ -386,7 +386,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ selectedServiceP
                     ) : (
                       <>
                         <CalendarIcon className="w-4 h-4" />
-                        <span>Agendar Visita de Diagnóstico</span>
+                        <span>Agendar Cita</span>
                       </>
                     )}
                   </button>

@@ -29,11 +29,7 @@ const heroFeatures = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
-interface HeroProps {
-  onScheduleClick?: () => void;
-}
-
-export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
+export const Hero: React.FC = () => {
   const [heroStage, setHeroStage] = useState<'static' | 'hidden' | 'visible'>('static');
 
   useEffect(() => {
@@ -86,12 +82,11 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
           <motion.div variants={heroItem} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-7">
             <a
               id="hero-cta-agendar"
-              href="#contacto"
-              onClick={onScheduleClick}
+              href="/agendar-cita"
               className="hero-button hero-button--primary w-full sm:w-auto px-8 py-4 text-base"
             >
               <CalendarCheck2 className="w-5 h-5" />
-              <span>Agendar Visita de Diagnóstico</span>
+              <span>Agendar Cita</span>
               <ArrowRight className="w-4 h-4" />
             </a>
 
@@ -144,7 +139,7 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
               title="Sistema de Gestión ERP"
               description="Control de stock, ventas y caja"
               accentClass="text-sky-400"
-              labelClass="text-slate-400"
+              labelClass="text-sky-300"
             />
             </motion.div>
             <motion.div variants={heroItem}>
@@ -154,7 +149,7 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
               title="Estrategia de Alcance"
               description="Visibilidad que genera clientes"
               accentClass="text-cyan-400"
-              labelClass="text-slate-400"
+              labelClass="text-sky-300"
             />
             </motion.div>
             <motion.div variants={heroItem}>
@@ -164,7 +159,7 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
               title="Transformación Total"
               description="Software interno + ventas online"
               accentClass="text-emerald-400"
-              labelClass="text-slate-400"
+              labelClass="text-sky-300"
             />
             </motion.div>
             <motion.div variants={heroItem}>
@@ -174,7 +169,7 @@ export const Hero: React.FC<HeroProps> = ({ onScheduleClick }) => {
               title="Agendamiento Directo"
               description="Sincroniza visitas y reuniones"
               accentClass="text-blue-400"
-              labelClass="text-slate-400"
+              labelClass="text-sky-300"
             />
             </motion.div>
           </motion.div>

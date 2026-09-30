@@ -14,6 +14,7 @@ export interface TeamMember {
   specialty: string;
   bio: string;
   avatarSeed: string;
+  avatarEmoji: string;
   skills: string[];
 }
 

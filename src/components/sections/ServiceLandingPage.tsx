@@ -165,7 +165,7 @@ export const ServiceLandingPage: React.FC<{ page: ServicePageContent }> = ({ pag
             <h1 className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">{page.heading}</h1>
             <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-slate-300">{page.intro}</p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href={`/?servicio=${encodeURIComponent(page.inquiry)}#contacto`} className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 px-7 py-3.5 font-bold text-white shadow-lg shadow-sky-950/40 hover:brightness-110">
+              <a href={`/agendar-cita?servicio=${encodeURIComponent(page.inquiry)}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 px-7 py-3.5 font-bold text-white shadow-lg shadow-sky-950/40 hover:brightness-110">
                 Hablemos de tu proyecto <ArrowRight className="h-4 w-4" />
               </a>
               <a href={`https://wa.me/${COMPANY_PHONE_RAW}?text=${whatsappMessage}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-7 py-3.5 font-semibold text-slate-100 hover:border-emerald-400/50">
@@ -223,7 +223,7 @@ export const ServiceLandingPage: React.FC<{ page: ServicePageContent }> = ({ pag
         <section className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-24">
           <h2 className="text-3xl font-bold text-white">Cuéntanos qué necesita tu empresa</h2>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-300">Revisaremos tu necesidad y conversaremos sobre el alcance adecuado para tu proyecto.</p>
-          <a href={`/?servicio=${encodeURIComponent(page.inquiry)}#contacto`} className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-bold text-slate-950 hover:bg-sky-100">Solicitar una conversación <ArrowRight className="h-4 w-4" /></a>
+          <a href={`/agendar-cita?servicio=${encodeURIComponent(page.inquiry)}`} className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-bold text-slate-950 hover:bg-sky-100">Agendar Cita <ArrowRight className="h-4 w-4" /></a>
         </section>
       </main>
       <Footer />

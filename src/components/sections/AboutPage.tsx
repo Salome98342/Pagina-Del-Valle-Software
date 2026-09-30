@@ -30,7 +30,7 @@ export const AboutPage: React.FC = () => (
       </section>
 
       <section className="py-20 sm:py-24">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="mx-auto grid items-stretch max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <FadeInSection>
             <article className="h-full rounded-3xl border border-sky-500/20 bg-gradient-to-br from-slate-900 to-sky-950/40 p-8 sm:p-10">
               <Target className="h-9 w-9 text-sky-400" /><h2 className="mt-5 text-3xl font-bold text-white">Nuestra misión</h2>
@@ -51,8 +51,19 @@ export const AboutPage: React.FC = () => (
       <section className="border-y border-slate-800/80 bg-slate-900/40 py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeInSection><div className="mb-12 max-w-2xl"><p className="font-semibold uppercase tracking-[0.2em] text-sky-400">Lo que nos guía</p><h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Nuestros valores</h2><p className="mt-4 text-slate-300">Principios que orientan cómo pensamos, desarrollamos y colaboramos con cada cliente.</p></div></FadeInSection>
-          <StaggerContainer className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {values.map(({ title, text, Icon }) => <StaggerItem key={title}><article className="h-full rounded-2xl border border-slate-800 bg-slate-950/70 p-6"><span className="inline-flex rounded-xl border border-sky-500/20 bg-sky-500/10 p-3 text-sky-400"><Icon className="h-6 w-6" /></span><h3 className="mt-5 text-lg font-bold text-white">{title}</h3><p className="mt-2 leading-relaxed text-slate-400">{text}</p></article></StaggerItem>)}
+          <StaggerContainer className="grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-6">
+            {values.map(({ title, text, Icon }, index) => (
+              <StaggerItem
+                key={title}
+                className={`lg:col-span-2 ${index === 3 ? 'lg:col-start-2' : ''} ${index === 4 ? 'lg:col-start-4' : ''}`}
+              >
+                <article className="rounded-2xl border border-slate-800 bg-slate-950/70 p-6">
+                  <span className="inline-flex rounded-xl border border-sky-500/20 bg-sky-500/10 p-3 text-sky-400"><Icon className="h-6 w-6" /></span>
+                  <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
+                  <p className="mt-2 leading-relaxed text-slate-400">{text}</p>
+                </article>
+              </StaggerItem>
+            ))}
           </StaggerContainer>
         </div>
       </section>
@@ -70,7 +81,7 @@ export const AboutPage: React.FC = () => (
       </section>
 
       <TeamSection />
-      <section className="border-t border-slate-800/80 bg-slate-900/40 py-16"><div className="mx-auto max-w-4xl px-4 text-center sm:px-6"><Handshake className="mx-auto h-9 w-9 text-sky-400"/><h2 className="mt-4 text-3xl font-bold text-white">Construyamos algo que impulse tu negocio</h2><p className="mt-3 text-slate-300">Cuéntanos qué necesitas y conversemos sobre una solución a tu medida.</p><a href="/#contacto" className="mt-6 inline-flex rounded-xl bg-sky-600 px-6 py-3 font-bold text-white transition-colors hover:bg-sky-500">Hablemos de tu proyecto</a></div></section>
+      <section className="border-t border-slate-800/80 bg-slate-900/40 py-16"><div className="mx-auto max-w-4xl px-4 text-center sm:px-6"><Handshake className="mx-auto h-9 w-9 text-sky-400"/><h2 className="mt-4 text-3xl font-bold text-white">Construyamos algo que impulse tu negocio</h2><p className="mt-3 text-slate-300">Al trabajar con Del Valle Software recibes atención directa de sus creadores. Sin capas burocráticas, con honestidad técnica y código limpio construido para durar y crecer con tu empresa.</p><a href="/agendar-cita" className="mt-6 inline-flex rounded-xl bg-sky-600 px-6 py-3 font-bold text-white transition-colors hover:bg-sky-500">Agendar Cita</a></div></section>
     </main>
     <Footer />
   </div>
